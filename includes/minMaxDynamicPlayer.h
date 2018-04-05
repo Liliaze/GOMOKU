@@ -3,7 +3,7 @@
 
 #include "player.h"
 
-#define NUM_THREADS 4
+#define NUM_THREADS 1
 #define STARTING_ROUND 4
 #define STARTING_DEPTH 6
 
@@ -16,7 +16,8 @@ class Choice
 		HeuristicBoard ennemyHeuristic;
 		std::vector<std::pair<unsigned char, unsigned char>> captured;
 	
-		Choice(unsigned char x, unsigned char y, HeuristicBoard *myHeuristic, HeuristicBoard *ennemyHeuristic, bool ennemy = false);
+		Choice(unsigned char x, unsigned char y, HeuristicBoard *myHeuristic, HeuristicBoard *ennemyHeuristic, bool ennemy);
+		Choice(unsigned char x, unsigned char y, HeuristicBoard *myHeuristic, HeuristicBoard *ennemyHeuristic);
 		Choice();
 		~Choice();
 };
@@ -36,7 +37,8 @@ class MinMaxDynamicPlayer : public Player
 		long long max(Gomoku *gomoku, int depth, long long minBestOption, long long maxBestOption, Rules &rules, HeuristicBoard myH, HeuristicBoard ennemyH);
 		void startMinMax(int &rx, int &ry, Rules &rules);
 		bool win(int &rx, int &ry, Rules &rules);
-		std::multimap<long long, Choice> heuristicMap(Gomoku *gomoku, Rules &rules, Player *player, bool last, int depht, HeuristicBoard &myOrigin, HeuristicBoard &ennemyOrigin, bool focus = false);
+		void heuristicMap(std::multimap<long long, Choice> &result,  Gomoku *gomoku, Rules &rules, Player *player, bool last, int depht, HeuristicBoard &myOrigin, HeuristicBoard &ennemyOrigin, bool focus = false);
+		void heuristicMap_e(std::multimap<long long, Choice> &result,  Gomoku *gomoku, Rules &rules, Player *player, bool last, int depht, HeuristicBoard &myOrigin, HeuristicBoard &ennemyOrigin, bool focus = false);
 		bool canAvoidDefeat(HeuristicBoard &myH, HeuristicBoard &ennemyH);
 		long long heuristic(HeuristicBoard &heuristic, HeuristicBoard &ennemyHeuristic, bool last, int depth);
 		bool canAvoidDefeat_e(HeuristicBoard &myH, HeuristicBoard &ennemyH);

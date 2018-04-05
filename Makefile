@@ -1,7 +1,7 @@
 NAME= Gomoku
 
 CC= g++
-CFLAGS= -pthread -std=c++11 -Wall -Wextra -O2 -g3  #-Werror -fsanitize=address
+CFLAGS= -pthread -std=c++11 -Wall -Wextra -Ofast -g3  #-Werror -fsanitize=address
 SFMLFLAG= -L ~/.brew/opt/sfml/lib -L ./lib -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 SRC_NAME= main.cpp \
           utils.cpp \
@@ -16,6 +16,10 @@ SRC_NAME= main.cpp \
 	  boardIterator.cpp\
 	  minMaxDynamicPlayer.cpp\
 	  heuristicBoard.cpp\
+	  heuristicBoard_h.cpp\
+	  heuristicBoard_v.cpp\
+	  heuristicBoard_dl.cpp\
+	  heuristicBoard_dr.cpp\
 	  menu.cpp
 SRC_PATH= ./sources/
 INC_PATH= ./includes/

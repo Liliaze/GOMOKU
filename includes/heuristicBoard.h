@@ -58,11 +58,41 @@ class HeuristicBoard
 		void getAdjacent(char x, char y, char vx, char vy, char &before, char &after, char &beforeWall, char &afterWall);
 		int getBestLevel(unsigned char x, unsigned char y);
 		void fiveValue(unsigned char &value, unsigned char heuristic);
+
+		//FOR ALL
 		void updateThreat(char x, char y, char vx, char vy, char shift, short int mask);
 		void removeEnnemyThreat(char x, char y, char vx, char vy, char shift, short int mask);
 		void removeThreat(char x, char y, char vx, char vy, char shift, short int mask);
 		void clearOne(char x, char y, char vx, char vy, char shift, short int mask);
 		void searchFreeThree(char x, char y, char vx, char vy, char shift, short int mask, unsigned char &result);
+
+		//FOR HORIZONTAL ONLY
+		void updateThreat_h(char x, char y, char vx, char vy);
+		void removeEnnemyThreat_h(char x, char y, char vx, char vy);
+		void removeThreat_h(char x, char y, char vx, char vy);
+		void clearOne_h(char x, char y, char vx, char vy);
+		void searchFreeThree_h(char x, char y, char vx, char vy, unsigned char &result);
+
+		//FOR VERTICAL ONLY
+		void updateThreat_v(char x, char y, char vx, char vy);
+		void removeEnnemyThreat_v(char x, char y, char vx, char vy);
+		void removeThreat_v(char x, char y, char vx, char vy);
+		void clearOne_v(char x, char y, char vx, char vy);
+		void searchFreeThree_v(char x, char y, char vx, char vy, unsigned char &result);
+
+		//FOR LEFT DIAGONAL ONLY
+		void updateThreat_dl(char x, char y, char vx, char vy);
+		void removeEnnemyThreat_dl(char x, char y, char vx, char vy);
+		void removeThreat_dl(char x, char y, char vx, char vy);
+		void clearOne_dl(char x, char y, char vx, char vy);
+		void searchFreeThree_dl(char x, char y, char vx, char vy, unsigned char &result);
+
+		//FOR RIGHT DIAGONAL ONLY
+		void updateThreat_dr(char x, char y, char vx, char vy);
+		void removeEnnemyThreat_dr(char x, char y, char vx, char vy);
+		void removeThreat_dr(char x, char y, char vx, char vy);
+		void clearOne_dr(char x, char y, char vx, char vy);
+		void searchFreeThree_dr(char x, char y, char vx, char vy, unsigned char &result);
 	
 	public:
 		long long score;

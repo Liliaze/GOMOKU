@@ -89,22 +89,22 @@ HeuristicBoard& HeuristicBoard::clear(unsigned char x, unsigned char y)
 	if (GET_HH(heuristic[x][y]) < 5)
 		REMOVE_THREAT(GET_HH(heuristic[x][y]));
 	else
-		clearOne(x, y, 1, 0, HORIZONTAL_SHIFT, HORIZONTAL_MASK);
+		clearOne_h(x, y, 1, 0);
 
 	if (GET_VH(heuristic[x][y]) < 5)
 		REMOVE_THREAT(GET_VH(heuristic[x][y]));
 	else
-		clearOne(x, y, 0, 1, VERTICAL_SHIFT, VERTICAL_MASK);
+		clearOne_v(x, y, 0, 1);
 
 	if (GET_DLH(heuristic[x][y]) < 5)
 		REMOVE_THREAT(GET_DLH(heuristic[x][y]));
 	else
-		clearOne(x, y, -1, 1, DLEFT_SHIFT, DLEFT_MASK);
+		clearOne_dl(x, y, -1, 1);
 
 	if (GET_DRH(heuristic[x][y]) < 5)
 		REMOVE_THREAT(GET_DRH(heuristic[x][y]));
 	else
-		clearOne(x, y, 1, 1, DRIGHT_SHIFT, DRIGHT_MASK);
+		clearOne_dr(x, y, 1, 1);
 
 	heuristic[x][y] = 0;
 	return *this;
@@ -207,37 +207,37 @@ void HeuristicBoard::removeThreat(char x, char y, char vx, char vy, char shift, 
 
 void HeuristicBoard::beCaptured(unsigned char x, unsigned char y)
 {
-	removeThreat(x, y, 0, 1, HORIZONTAL_SHIFT, HORIZONTAL_MASK);
-	removeThreat(x, y, 1, 0, VERTICAL_SHIFT, VERTICAL_MASK);
-	removeThreat(x, y, 1, 1, DRIGHT_SHIFT, DRIGHT_MASK);
-	removeThreat(x, y, -1, 1, DLEFT_SHIFT, DLEFT_MASK);
+	removeThreat_h(x, y, 0, 1);
+	removeThreat_v(x, y, 1, 0);
+	removeThreat_dr(x, y, 1, 1);
+	removeThreat_dl(x, y, -1, 1);
 }
 
 void HeuristicBoard::capture(unsigned char x, unsigned char y)
 {
-	removeEnnemyThreat(x, y, 0, 1, HORIZONTAL_SHIFT, HORIZONTAL_MASK);
-	removeEnnemyThreat(x, y, 1, 0, VERTICAL_SHIFT, VERTICAL_MASK);
-	removeEnnemyThreat(x, y, 1, 1, DRIGHT_SHIFT, DRIGHT_MASK);
-	removeEnnemyThreat(x, y, -1, 1, DLEFT_SHIFT, DLEFT_MASK);
+	removeEnnemyThreat_h(x, y, 0, 1);
+	removeEnnemyThreat_v(x, y, 1, 0);
+	removeEnnemyThreat_dr(x, y, 1, 1);
+	removeEnnemyThreat_dl(x, y, -1, 1);
 	totalCaptured += 1;
 }
 
 HeuristicBoard& HeuristicBoard::put(unsigned char x, unsigned char y)
 {
-	updateThreat(x, y, 0, 1, HORIZONTAL_SHIFT, HORIZONTAL_MASK);
-	updateThreat(x, y, 1, 0, VERTICAL_SHIFT, VERTICAL_MASK);
-	updateThreat(x, y, 1, 1, DRIGHT_SHIFT, DRIGHT_MASK);
-	updateThreat(x, y, -1, 1, DLEFT_SHIFT, DLEFT_MASK);
+	updateThreat_h(x, y, 0, 1);
+	updateThreat_v(x, y, 1, 0);
+	updateThreat_dr(x, y, 1, 1);
+	updateThreat_dl(x, y, -1, 1);
 	return clear(x, y);
 }
 
 bool HeuristicBoard::checkDoubleFreeThree(unsigned char x, unsigned char y)
 {
 	unsigned char n = 0;
-	searchFreeThree(x, y, 0, 1, HORIZONTAL_SHIFT, HORIZONTAL_MASK, n);
-	searchFreeThree(x, y, 1, 0, VERTICAL_SHIFT, VERTICAL_MASK, n);
-	searchFreeThree(x, y, 1, 1, DRIGHT_SHIFT, DRIGHT_MASK, n);
-	searchFreeThree(x, y, -1, 1, DLEFT_SHIFT, DLEFT_MASK, n);
+	searchFreeThree_h(x, y, 0, 1, n);
+	searchFreeThree_v(x, y, 1, 0, n);
+	searchFreeThree_dr(x, y, 1, 1, n);
+	searchFreeThree_dl(x, y, -1, 1, n);
 	return (n >= 2);
 }
 

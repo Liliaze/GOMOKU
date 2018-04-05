@@ -12,8 +12,8 @@ using namespace sf;
 Gomoku::Gomoku(Rules &rules, Interface &interface) : rules(rules), interface(interface)
 {
 	clone = false;
-	whitePlayer = new HumanPlayer();
-	blackPlayer = new HumanPlayer();
+	whitePlayer = new MinMaxDynamicPlayer(5);
+	blackPlayer = new MinMaxDynamicPlayer(5);
 	for (int i = 0; i < GW; i++) {
 		for (int j = 0; j < GH; j++) {
 			board[i][j] = FREE;
@@ -76,7 +76,8 @@ void Gomoku::drawStone() {
 void Gomoku::start() {
 
 	std::vector<std::pair<unsigned char, unsigned char>> captured;
-	interface.setState(MENU);
+//	interface.setState(MENU);
+	interface.setState(GAME);
 	currentPlayer = blackPlayer;
 	while (interface.getState() == MENU)  {
 		interface.checkEvent(*currentPlayer);
@@ -112,6 +113,8 @@ void Gomoku::start() {
 		interface.checkEvent(*currentPlayer);
 		captured.clear();
 		rules.turnCounter += 1;
+		if (rules.turnCounter == 4)
+			exit(1);
 	}
 	DEBUG << "Game end after " << rules.turnCounter << " turns\n";
 	this->end();
