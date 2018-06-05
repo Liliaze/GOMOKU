@@ -68,7 +68,7 @@ void	ProRules::specificRules(Interface &interface) {
 	if (turnCounter > 3)
 		return;
 	else if (turnCounter <= 2){
-		interface.setShapeInDrawList(interface.getPtrFiveByFiveRect());
+		interface.getShapeList().push_back(interface.getPtrFiveByFiveRect());
 	}
 	if (turnCounter == 0)
 		interface.setRulesText("Play :\nin Middle = H8.", BRULESX, BRULESY);

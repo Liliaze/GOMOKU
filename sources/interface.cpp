@@ -40,10 +40,6 @@ void    Interface::makeRectangleShape(RectangleShape *shape, int sizeX, int size
     shape->setPosition(posX, posY);
 }
 
-void    Interface::setShapeInDrawList(Shape *shape) {
-    _allShape.push_back(shape);
-}
-
 //TO-DO : Ajout texture des autres States ici.
 void    Interface::loadTexture(void) {
    if(!_stoneWhiteTexture.loadFromFile("./sprite/whiteStone.png")
@@ -556,7 +552,7 @@ void    Interface::unputPreviewStone(int mouseX, int mouseY) {
         }
 }
 
-void    Interface::checkEvent(Player *current) {
+bool    Interface::checkEventSwap() {
     while (_window.pollEvent(_event))
     {
         switch (_event.type)
@@ -564,6 +560,61 @@ void    Interface::checkEvent(Player *current) {
             case Event::Closed :
                 gomoku->end();
                 break;
+            case Event::KeyPressed :
+            {
+                switch (_event.key.code)
+                {
+                    case Keyboard::Escape :
+                        gomoku->end();
+                        break;
+                    case Keyboard::Q :
+                        gomoku->end();
+                        break;
+                    default :
+                        break;
+                }
+            }
+            break;
+            case Event::MouseButtonPressed :
+            {
+                switch (_event.mouseButton.button)
+                {
+                    case Mouse::Left :
+                    {
+                        int x = _event.mouseButton.x;
+                        int y = _event.mouseButton.y;
+                        if (onAgainYes(x, y)){
+                            return (true);
+                        }
+                        else if (onAgainNo(x, y)) {
+		                    gomoku->swapPlayer();
+                            gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
+                            return (true);
+                        }
+                        DEBUG << "click : xy(" << x << "," << y << ")\n"; 
+                    }
+                    break;
+                    default :
+                    break;
+                }
+            }
+            break;
+            default :
+                return (false);
+            break;
+        }
+    }
+    return false;
+}
+
+void    Interface::checkEvent(Player *current) {
+    while (_window.pollEvent(_event))
+    {
+        switch (_event.type)
+        {
+            case Event::Closed :
+                gomoku->end();
+            break;
             case Event::KeyPressed :
             {
                 switch (_event.key.code)

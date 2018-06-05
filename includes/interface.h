@@ -68,7 +68,7 @@ class Interface {
 		void	checkClickLeft(Player *current, int x, int y);
 		void	setStoneOnClick(Player &player, int x, int y);
 		void	checkEvent(Player *current);
-		void	checkEventAgain();
+		bool	checkEventSwap();
 		
 		void	setState(State newState);
 		void	capture(Player &current, sf::Sprite *spriteEnemy, int x, int y);
@@ -84,8 +84,12 @@ class Interface {
 		inline	sf::RectangleShape	*getPtrSevenBySevenRect(void) {return &(this->sevenBySevenRect);}
 		inline	sf::Sprite			*getSpriteWhiteStone(void) {return &(this->_whiteStone);}
 		inline	sf::Sprite			*getSpriteBlackStone(void) {return &(this->_blackStone);}
+		inline	sf::Sprite			&getSpriteYes(void) {return this->_againYesSprite;}
+		inline	sf::Sprite			&getSpriteNo(void) {return this->_againNoSprite;}
+		inline	sf::Text			*getPtrRulesText(void) {return &(this->rulesText);}
 		inline	void				setTimeToPlay(sf::Time newTime) {this->_timeToPlay = newTime;}
-		void						setShapeInDrawList(sf::Shape *shape);
+		inline	std::list<sf::Shape*>	&getShapeList() {return this->_allShape;}
+		inline	std::list<sf::Sprite>	&getSpriteList() {return this->_allSprite;}
 		inline void					setRulesText(sf::String text, int screenX, int screenY) {this->rulesText.setString(text);this->rulesText.setPosition(screenX, screenY);}
 		sf::Vector2<int> whiteCanteen[10];
 		sf::Vector2<int> blackCanteen[10];

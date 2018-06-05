@@ -68,9 +68,10 @@ class Gomoku
 		inline void		setCurrentPlayer(Player *p) {currentPlayer = p;}
 		inline void		setRules(Rules *r) {rules = r; updateStartingFocus();}
 		void			updateStartingFocus(void);
-		void			updateWhitePlayer(void);
-		void			updateBlackPlayer(void);
+		void			updatePlayerInWhite(Player &p);
+		void			updatePlayerInBlack(Player &p);
 		void			updatePlayer(void);
+		void			swapPlayer(void);
 		void			updateRules(void);
 		inline Player	*getCurrentPlayer() {return currentPlayer;}
 		inline Stone**	getBoard() {return (Stone**)board;}

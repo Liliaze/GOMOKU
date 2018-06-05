@@ -43,10 +43,17 @@ void	Gomoku::initGomoku() {
 
 void	Gomoku::updatePlayer()
 {
-	updateBlackPlayer();
-	updateWhitePlayer();
+	updatePlayerInBlack(getBlackPlayer());
+	updatePlayerInWhite(getWhitePlayer());
 	currentPlayer = blackPlayer;
 	DEBUG << "PLAYER UPDATED\n";
+}
+
+void	Gomoku::swapPlayer() {
+	updatePlayerInBlack(getWhitePlayer());
+	whitePlayer->setEnemy(blackPlayer);
+	updatePlayerInWhite(getBlackPlayer());
+	blackPlayer->setEnemy(whitePlayer);
 }
 
 void	Gomoku::updateRules()
@@ -55,22 +62,22 @@ void	Gomoku::updateRules()
 	rules->turnCounter = 0;
 }
 
-void	Gomoku::updateWhitePlayer()
+void	Gomoku::updatePlayerInWhite(Player &p)
 {
-	whitePlayer->setSpriteStone(&(interface._whiteStone));
-	whitePlayer->setCanteen(interface.whiteCanteen);
-	whitePlayer->setGomoku(this);
-	whitePlayer->setColor(WHITE);
-	whitePlayer->setEnemy(blackPlayer);
+	p.setSpriteStone(&(interface._whiteStone));
+	p.setCanteen(interface.whiteCanteen);
+	p.setGomoku(this);
+	p.setColor(WHITE);
+	p.setEnemy(blackPlayer);
 }
 
-void	Gomoku::updateBlackPlayer()
+void	Gomoku::updatePlayerInBlack(Player &p)
 {
-	blackPlayer->setSpriteStone(&(interface._blackStone));
-	blackPlayer->setCanteen(interface.blackCanteen);
-	blackPlayer->setGomoku(this);
-	blackPlayer->setColor(BLACK);
-	blackPlayer->setEnemy(whitePlayer);
+	p.setSpriteStone(&(interface._blackStone));
+	p.setCanteen(interface.blackCanteen);
+	p.setGomoku(this);
+	p.setColor(BLACK);
+	p.setEnemy(whitePlayer);
 }
 
 Gomoku::~Gomoku()

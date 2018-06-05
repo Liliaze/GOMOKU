@@ -12,7 +12,6 @@ Rules *SwapRules::copy() {
 	SwapRules *cpy = new SwapRules();
 	cpy->setGomoku(gomoku);
 	cpy->setTurnCounter(turnCounter);
-    DEBUG << "SwapRules";
 	return cpy;
 }
 
@@ -31,19 +30,32 @@ void	SwapRules::specificRules(Interface &interface) {
 		interface.setRulesText("Put 3 first stone,\nwhere you want.", BRULESX, BRULESY);
 	else if (turnCounter == 1) {
 		interface.setRulesText("Put 3 first stone,\nwhere you want.", BRULESX, BRULESY);
-		gomoku->setCurrentPlayer(gomoku->getCurrentPlayer()->getEnemy());
-		gomoku->getCurrentPlayer()->setColor(WHITE);
-		gomoku->getCurrentPlayer()->setSpriteStone(interface.getSpriteWhiteStone());
+		gomoku->swapPlayer();
+		gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
 	}
 	else if (turnCounter == 2){
 		interface.setRulesText("Put 3 first stone,\nwhere you want.", BRULESX, BRULESY);
-		gomoku->setCurrentPlayer(gomoku->getCurrentPlayer()->getEnemy());
-		gomoku->getCurrentPlayer()->setColor(BLACK);
-		gomoku->getCurrentPlayer()->setSpriteStone(interface.getSpriteBlackStone());
+		gomoku->updatePlayer();
 	}
 	else if (turnCounter == 3){
-		DEBUG << "MISSING implementation SWAP PLAYER IF HUMAN OR IF IA";
-		interface.setRulesText("CHOOSE :\n-play white now\n-play black after\n...and forever", WRULESX, WRULESY);
+		bool waitChoice = false;
+		interface.setRulesText("Do you want play now with blank ?", WRULESY / 2, BOARD_UP - 30);
+		interface.getPtrRulesText()->setCharacterSize(30);
+		interface.getSpriteList().push_back(interface.getSpriteYes());
+		interface.getSpriteList().push_back(interface.getSpriteNo());
+		interface.update();
+		if (gomoku->getCurrentPlayer()->human){
+			while(!waitChoice) {
+				waitChoice = interface.checkEventSwap();
+			}
+		}
+		else {
+			//implémenter choix de stratégie IA.
+		}
+		interface.getSpriteList().pop_back();
+		interface.getSpriteList().pop_back();
+		interface.getPtrRulesText()->setCharacterSize(20);
+		interface.update();
 	}
 	else if (turnCounter == 4)
 		interface.setRulesText("No specific rules", BRULESX, BRULESY);
