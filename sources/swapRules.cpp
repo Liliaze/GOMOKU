@@ -24,40 +24,32 @@ bool SwapRules::canPutStone(HeuristicBoard *heuristic, int x, int y) {
 }
 
 void	SwapRules::specificRules(Interface &interface) {
-	if (turnCounter > 4)
+	if (turnCounter >= 4){
+		interface.getPtrRulesText()->setString("No specific rules");
 		return;
+	}
 	else if (turnCounter == 0)
-		interface.setRulesText("Put 3 first stone,\nwhere you want.", BRULESX, BRULESY);
+		interface.setRulesText("Put first stone\nwhere you want.", BRULESX, BRULESY);
 	else if (turnCounter == 1) {
-		interface.setRulesText("Put 3 first stone,\nwhere you want.", BRULESX, BRULESY);
+		interface.setRulesText("Again you\nPut second stone\nwhere you want.", BRULESX, BRULESY);
 		gomoku->swapPlayer();
 		gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
 	}
 	else if (turnCounter == 2){
-		interface.setRulesText("Put 3 first stone,\nwhere you want.", BRULESX, BRULESY);
-		gomoku->updatePlayer();
+		interface.setRulesText("Again, again you\nPut third stone\nwhere you want.", BRULESX, BRULESY);
+		gomoku->resetColorPlayer();
+		gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
 	}
 	else if (turnCounter == 3){
-		bool waitChoice = false;
-		interface.setRulesText("Do you want play now with blank ?", WRULESY / 2, BOARD_UP - 30);
-		interface.getPtrRulesText()->setCharacterSize(30);
-		interface.getSpriteList().push_back(interface.getSpriteYes());
-		interface.getSpriteList().push_back(interface.getSpriteNo());
+		interface.setRulesText("Do you want play :\nWhite now\nor black after ?", WRULESX , WRULESY);
+		interface.getSpriteList().push_back(interface.getSpriteBlackBox());
+		interface.getSpriteList().push_back(interface.getSpriteWhiteBox());
 		interface.update();
-		if (gomoku->getCurrentPlayer()->human){
-			while(!waitChoice) {
-				waitChoice = interface.checkEventSwap();
-			}
-		}
-		else {
-			//implémenter choix de stratégie IA.
-		}
+		gomoku->getCurrentPlayer()->playSimpleSwap(gomoku, *this, interface);
+		interface.setRulesText("", WRULESX , WRULESY);
 		interface.getSpriteList().pop_back();
 		interface.getSpriteList().pop_back();
-		interface.getPtrRulesText()->setCharacterSize(20);
 		interface.update();
 	}
-	else if (turnCounter == 4)
-		interface.setRulesText("No specific rules", BRULESX, BRULESY);
 	return;
 }

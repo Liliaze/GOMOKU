@@ -14,6 +14,9 @@ class AssistedHumanPlayer : public MinMaxDynamicPlayer, public HumanPlayer
 
         virtual void play(Rules &rules, Interface &i);
         virtual void playForHelp(Rules &rules, Interface &i);
+		virtual void playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface &i);
+		virtual void playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &i);
+		virtual void playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &i);
 };
 
 #endif

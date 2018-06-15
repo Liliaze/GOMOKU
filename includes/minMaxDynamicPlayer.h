@@ -49,8 +49,11 @@ class MinMaxDynamicPlayer : public virtual Player
 		MinMaxDynamicPlayer(std::array<unsigned char, 11> dw);
 		~MinMaxDynamicPlayer();
 		virtual void play(Rules &rules, Interface &interfacce);
-		void startMinMax(int &rx, int &ry, Rules &rules);
+		long long startMinMax(int &rx, int &ry, Rules &rules, Interface &i);
 		void playToHelp(Rules &rules, Interface &interface);
+		virtual void playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface &i);
+		virtual void playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &i);
+		virtual void playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &i);
 };
 
 #endif

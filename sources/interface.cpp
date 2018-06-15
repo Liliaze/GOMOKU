@@ -54,6 +54,8 @@ void    Interface::loadTexture(void) {
     || !_equalityTexture.loadFromFile("./sprite/equality.png")
     || !_againYesTexture.loadFromFile("./sprite/againYesBox.png")
     || !_againNoTexture.loadFromFile("./sprite/againNoBox.png")
+    || !_blackBoxTexture.loadFromFile("./sprite/blackBox.png")
+    || !_whiteBoxTexture.loadFromFile("./sprite/whiteBox.png")
     || !_boxTexture.loadFromFile("./sprite/boxCube.png")
     || !_help1Texture.loadFromFile("./sprite/help1.png")
     || !_help2Texture.loadFromFile("./sprite/help2.png")
@@ -81,6 +83,8 @@ void    Interface::loadTexture(void) {
        _blackWinTexture.setSmooth(true);
        _equalityTexture.setSmooth(true);
        _boxTexture.setSmooth(true);
+       _blackBoxTexture.setSmooth(true);
+       _whiteBoxTexture.setSmooth(true);
        _help1Texture.setSmooth(true);
        _help2Texture.setSmooth(true);
        _help3Texture.setSmooth(true);
@@ -108,6 +112,8 @@ void    Interface::loadSprite(void) {
     makeSprite(_boxSprite, _boxTexture, 1, 1, HELPERX - 10, HELPERY - 10);
     makeSprite(_againYesSprite, _againYesTexture, 1, 1, YES_LEFT, YES_UP);
     makeSprite(_againNoSprite, _againNoTexture, 1, 1, NO_LEFT, NO_UP);
+    makeSprite(_blackBoxSprite, _blackBoxTexture, 0.45, 0.45, BLACKBOXP2_LEFT, SWAPBOX_UP);
+    makeSprite(_whiteBoxSprite, _whiteBoxTexture, 0.45, 0.45, WHITEBOXP2_LEFT, SWAPBOX_UP);
     makeSprite(_boxSelectSprite, _boxTexture, 1, 1, 0, 0);
     makeSprite(previewStoneFree, _stoneWhiteTexture,0.825f, 0.825f, 0, 0);
     makeSprite(previewStoneForbidden, _stoneWhiteTexture,0.825f, 0.825f, 0, 0);
@@ -188,7 +194,7 @@ void    Interface::loadText(void) {
     setText(&nbTurnText, arial,18, Color::Blue, NBTURNX, NBTURNY, "TURN : 0 BLACK ");
     setText(&blackTimeToPlayText, arial, 18, Color::Black, BTIMEX, BTIMEY, "0");
     setText(&whiteTimeToPlayText, arial, 18, Color::White, WTIMEX, WTIMEY, "0");
-    setText(&rulesText, arial, 20, Color::Red, BRULESX, WRULESY, "No specific rules\n good luck");/*
+    setText(&rulesText, arial, 18, Color::Red, BRULESX, WRULESY, "No specific rules\n good luck");/*
     setText(&help1, arial, 24, Color::Blue, 300, 300, "1");
     setText(&help2, arial, 24, Color(255,0,128), 400, 300, "2");
     setText(&help3, arial, 24, Color::Yellow, 500, 300, "3");
@@ -552,7 +558,7 @@ void    Interface::unputPreviewStone(int mouseX, int mouseY) {
         }
 }
 
-bool    Interface::checkEventSwap() {
+Vector2<int>    Interface::checkEventSwap() {
     while (_window.pollEvent(_event))
     {
         switch (_event.type)
@@ -581,30 +587,22 @@ bool    Interface::checkEventSwap() {
                 {
                     case Mouse::Left :
                     {
-                        int x = _event.mouseButton.x;
-                        int y = _event.mouseButton.y;
-                        if (onAgainYes(x, y)){
-                            return (true);
-                        }
-                        else if (onAgainNo(x, y)) {
-		                    gomoku->swapPlayer();
-                            gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
-                            return (true);
-                        }
-                        DEBUG << "click : xy(" << x << "," << y << ")\n"; 
+                        DEBUG << "click : xy(" << _event.mouseButton.x << "," << _event.mouseButton.y << ")\n"; 
+                        return (Vector2<int>(_event.mouseButton.x, _event.mouseButton.y));
                     }
                     break;
                     default :
+                        return (Vector2<int>(0, 0));
                     break;
                 }
             }
             break;
             default :
-                return (false);
+                return (Vector2<int>(-1,-1));
             break;
         }
     }
-    return false;
+    return (Vector2<int>(-1,-1));
 }
 
 void    Interface::checkEvent(Player *current) {
@@ -633,7 +631,7 @@ void    Interface::checkEvent(Player *current) {
             case Event::MouseMoved :
             {
                 if (current && !current->getHuman())
-                    break;
+                    return;
                 if (state == GAME) {
                     int x = _event.mouseMove.x;
                     int y = _event.mouseMove.y;
@@ -690,6 +688,46 @@ bool    Interface::onBoard(int x, int y)
         x >= BOARD_LEFT - MARGE &&
         y >= BOARD_UP - MARGE &&
         y <= BOARD_DOWN  + MARGE) 
+        return true;
+    else
+        return false;
+}
+
+bool    Interface::onBlackBoxP1(int x, int y) {
+    if (x <= BLACKBOXP1_RIGHT  && 
+        x >= BLACKBOXP1_LEFT  &&
+        y >= SWAPBOX_UP  &&
+        y <= SWAPBOX_DOWN )
+        return true;
+    else
+        return false;
+}
+
+bool    Interface::onBlackBoxP2(int x, int y) {
+    if (x <= BLACKBOXP2_RIGHT  && 
+        x >= BLACKBOXP2_LEFT &&
+        y >= SWAPBOX_UP  &&
+        y <= SWAPBOX_DOWN )
+        return true;
+    else
+        return false;
+}
+
+bool    Interface::onWhiteBoxP1(int x, int y) {
+    if (x <= WHITEBOXP1_RIGHT  && 
+        x >= WHITEBOXP1_LEFT  &&
+        y >= SWAPBOX_UP &&
+        y <= SWAPBOX_DOWN )
+        return true;
+    else
+        return false;
+}
+
+bool    Interface::onWhiteBoxP2(int x, int y) {
+    if (x <= WHITEBOXP2_RIGHT  && 
+        x >= WHITEBOXP2_LEFT  &&
+        y >= SWAPBOX_UP &&
+        y <= SWAPBOX_DOWN)
         return true;
     else
         return false;

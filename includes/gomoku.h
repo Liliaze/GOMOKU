@@ -70,7 +70,7 @@ class Gomoku
 		void			updateStartingFocus(void);
 		void			updatePlayerInWhite(Player &p);
 		void			updatePlayerInBlack(Player &p);
-		void			updatePlayer(void);
+		void			resetColorPlayer(void);
 		void			swapPlayer(void);
 		void			updateRules(void);
 		inline Player	*getCurrentPlayer() {return currentPlayer;}

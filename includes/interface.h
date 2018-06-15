@@ -20,6 +20,16 @@
 # define NO_RIGHT	995
 # define NO_UP	450
 # define NO_DOWN	555
+# define SWAPBOX_UP	700
+# define SWAPBOX_DOWN	745
+# define BLACKBOXP1_LEFT	5
+# define BLACKBOXP1_RIGHT	100
+# define WHITEBOXP1_LEFT	110
+# define WHITEBOXP1_RIGHT	200
+# define BLACKBOXP2_LEFT	991
+# define BLACKBOXP2_RIGHT	1090
+# define WHITEBOXP2_LEFT	1100
+# define WHITEBOXP2_RIGHT	1195
 # define BLACKCANTEENX 240
 # define BLACKCANTEENY 40
 # define WHITECANTEENX 960
@@ -68,7 +78,7 @@ class Interface {
 		void	checkClickLeft(Player *current, int x, int y);
 		void	setStoneOnClick(Player &player, int x, int y);
 		void	checkEvent(Player *current);
-		bool	checkEventSwap();
+		sf::Vector2<int>	checkEventSwap();
 		
 		void	setState(State newState);
 		void	capture(Player &current, sf::Sprite *spriteEnemy, int x, int y);
@@ -84,13 +94,21 @@ class Interface {
 		inline	sf::RectangleShape	*getPtrSevenBySevenRect(void) {return &(this->sevenBySevenRect);}
 		inline	sf::Sprite			*getSpriteWhiteStone(void) {return &(this->_whiteStone);}
 		inline	sf::Sprite			*getSpriteBlackStone(void) {return &(this->_blackStone);}
-		inline	sf::Sprite			&getSpriteYes(void) {return this->_againYesSprite;}
-		inline	sf::Sprite			&getSpriteNo(void) {return this->_againNoSprite;}
+		inline	sf::Sprite			&getSpriteBlackBox(void) {return this->_blackBoxSprite;}
+		inline	sf::Sprite			&getSpriteWhiteBox(void) {return this->_whiteBoxSprite;}
 		inline	sf::Text			*getPtrRulesText(void) {return &(this->rulesText);}
 		inline	void				setTimeToPlay(sf::Time newTime) {this->_timeToPlay = newTime;}
 		inline	std::list<sf::Shape*>	&getShapeList() {return this->_allShape;}
 		inline	std::list<sf::Sprite>	&getSpriteList() {return this->_allSprite;}
 		inline void					setRulesText(sf::String text, int screenX, int screenY) {this->rulesText.setString(text);this->rulesText.setPosition(screenX, screenY);}
+		bool	onBoard(int x, int y);
+		bool	onAgainYes(int x, int y);
+		bool	onAgainNo(int x, int y);
+		bool	onBlackBoxP1(int x, int y);
+		bool	onWhiteBoxP1(int x, int y);
+		bool	onBlackBoxP2(int x, int y);
+		bool	onWhiteBoxP2(int x, int y);
+		bool	onVisualAid(int x, int y);
 		sf::Vector2<int> whiteCanteen[10];
 		sf::Vector2<int> blackCanteen[10];
 
@@ -147,10 +165,6 @@ class Interface {
 		void	unputPreviewStone(int mouseX, int mouseY);
 		void	removeStone(int i, int j);
 		void	removeText(sf::Vector2<int> coordOfText);
-		bool	onBoard(int x, int y);
-		bool	onAgainYes(int x, int y);
-		bool	onAgainNo(int x, int y);
-		bool	onVisualAid(int x, int y);
 		void	updateTimerOfGame(void);
 		void	updateTimerToPlay(void);
 		void	updateNbOfTurn(void);
@@ -178,6 +192,8 @@ class Interface {
 		sf::Sprite			_boxSelectSprite;
 		sf::Sprite			_againYesSprite;
 		sf::Sprite			_againNoSprite;
+		sf::Sprite			_blackBoxSprite;
+		sf::Sprite			_whiteBoxSprite;
 		sf::Sprite			_help1Sprite;
 		sf::Sprite			_help2Sprite;
 		sf::Sprite			_help3Sprite;
@@ -201,6 +217,8 @@ class Interface {
 		sf::Texture			_equalityTexture;
 		sf::Texture			_againYesTexture;
 		sf::Texture			_againNoTexture;
+		sf::Texture			_blackBoxTexture;
+		sf::Texture			_whiteBoxTexture;
 		sf::Texture			_boxTexture;
 		sf::Texture			_help1Texture;
 		sf::Texture			_help2Texture;

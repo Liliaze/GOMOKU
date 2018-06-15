@@ -113,11 +113,14 @@ bool MinMaxDynamicPlayer::win(int &rx, int &ry, Rules &rules) {
 	return false;
 }
 
-void MinMaxDynamicPlayer::startMinMax(int &rx, int &ry, Rules &rules)
+long long MinMaxDynamicPlayer::startMinMax(int &rx, int &ry, Rules &rules, Interface &i)
 {
 	long long option;
 	long long best = MIN_LONG;
 	long long maxBestOption = MIN_LONG;
+	
+	i.getPtrRulesText()->setString("IA thinking...\nPlease waiting.");
+	i.update();
 
 	if (rules.getTurnCounter() < STARTING_ROUND && minMaxDepth > STARTING_DEPTH)
 		usedDepth = STARTING_DEPTH;
@@ -137,6 +140,8 @@ void MinMaxDynamicPlayer::startMinMax(int &rx, int &ry, Rules &rules)
 	for (auto& th : threads) th.join();
 
 	DEBUG << "complexity : " << complexity << "\n";
+	i.getPtrRulesText()->setString("");
+	return best;
 }
 
 void MinMaxDynamicPlayer::startThread(int &rx, int &ry, long long &option, long long &best, long long &maxBestOption, std::multimap<long long, std::unique_ptr<Choice>> &choices, int threadIndex) {
@@ -257,21 +262,56 @@ long long MinMaxDynamicPlayer::max(Gomoku *origin, int depth, long long minBestO
 
 
 void MinMaxDynamicPlayer::play(Rules &rules, Interface &i) {
-	(void)i;
 	int x = -1;
 	int y = -1;
-	startMinMax(x, y, rules);
+	startMinMax(x, y, rules, i);
 	putStone(x, y);
 	setCoordPlayed(x, y);
 }
 
 void MinMaxDynamicPlayer::playToHelp(Rules &rules, Interface &i) {
-	(void)i;
 	int x = -1;
 	int y = -1;
-	startMinMax(x, y, rules);
+	startMinMax(x, y, rules, i);
 	i.putStoneToHelp(x, y);
 }
+
+void  MinMaxDynamicPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface &i) {
+	long long ifImPlayBlack = MIN_LONG;
+	long long ifImPlayWhite = MIN_LONG;
+	int x1 = -1;
+	int y1 = -1;
+	int x2 = -1;
+	int y2 = -1;
+
+	ifImPlayWhite = startMinMax(x1,y1,rules, i); //test si reste blanc
+	//putStone(x1, y1); //pose temporairement une blanche
+	gomoku->swapPlayer(); //devient temporairement noir
+	ifImPlayBlack = startMinMax(x2,y2,rules, i); // test si joue noir au prochain tour
+	if (ifImPlayWhite > ifImPlayBlack) { //si les prévisions pour blanc étaient meilleure
+		gomoku->resetColorPlayer(); //redevenir blanc,
+		i.setRulesText("IA choosed WHITE and played\n You are still black\nIt's your turn", BRULESX , BRULESY);
+	}
+	else {
+		i.setRulesText("IA choosed BLACK\nYou are now white\nIt's your turn", WRULESX , WRULESY);
+		gomoku->setCurrentPlayer(gomoku->aBlackPlayer()); //rester noir mais donner la main à l'adversaire qui est devenu blanc
+	}
+	//retirer la pierre blanche posé temporairement... ??? comment faire ! MERLIN ??
+	return;
+}
+
+void  MinMaxDynamicPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &interface) {
+	(void)rules;
+	(void)gomoku;
+	(void)interface;
+}
+
+void  MinMaxDynamicPlayer::playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &interface) {
+	(void)rules;
+	(void)gomoku;
+	(void)interface;
+}
+
 
 long long MinMaxDynamicPlayer::heuristic(HeuristicBoard &myH, HeuristicBoard &ennemyH, bool last, int depth) {
 	if (last && !canAvoidDefeat(myH, ennemyH)) {

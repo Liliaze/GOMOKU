@@ -41,19 +41,36 @@ void	Gomoku::initGomoku() {
 	currentPlayer = blackPlayer;
 }
 
-void	Gomoku::updatePlayer()
+void	Gomoku::resetColorPlayer()
 {
+	//HeuristicBoard	&tmpH = *(whitePlayer->getMyHeuristic());
+	int		tmpCapture = whitePlayer->getNbCapture();
+	
 	updatePlayerInBlack(getBlackPlayer());
 	updatePlayerInWhite(getWhitePlayer());
-	currentPlayer = blackPlayer;
-	DEBUG << "PLAYER UPDATED\n";
+	//currentPlayer = blackPlayer;
+
+	whitePlayer->setNbCapture(blackPlayer->getNbCapture());
+	blackPlayer->setNbCapture(tmpCapture);
+/*	whitePlayer->setMyHeuristic(*(whitePlayer->getEnnemyHeuristic()));
+	blackPlayer->setMyHeuristic(tmpH);
+	whitePlayer->setEnnemyHeuristic(*(blackPlayer->getMyHeuristic()));
+	blackPlayer->setEnnemyHeuristic(*(whitePlayer->getMyHeuristic()));*/
 }
 
 void	Gomoku::swapPlayer() {
+	//HeuristicBoard	&tmpH = *(whitePlayer->getMyHeuristic());
+	int		tmpCapture = whitePlayer->getNbCapture();
 	updatePlayerInBlack(getWhitePlayer());
-	whitePlayer->setEnemy(blackPlayer);
 	updatePlayerInWhite(getBlackPlayer());
 	blackPlayer->setEnemy(whitePlayer);
+	whitePlayer->setEnemy(blackPlayer);
+	blackPlayer->setNbCapture(tmpCapture);
+	whitePlayer->setNbCapture(blackPlayer->getNbCapture());
+	/*whitePlayer->setMyHeuristic(*(whitePlayer->getEnnemyHeuristic()));
+	blackPlayer->setMyHeuristic(tmpH);
+	whitePlayer->setEnnemyHeuristic(*(blackPlayer->getMyHeuristic()));
+	blackPlayer->setEnnemyHeuristic(*(whitePlayer->getMyHeuristic()));*/
 }
 
 void	Gomoku::updateRules()
@@ -116,7 +133,9 @@ void Gomoku::start() {
 		}
 		int x = 0;
 		int y = 0;
-		updatePlayer();
+		updatePlayerInBlack(getBlackPlayer());
+		updatePlayerInWhite(getWhitePlayer());
+		setCurrentPlayer(aBlackPlayer());
 		updateRules();
 		while (!(end = rules->checkEnd(*currentPlayer))) {
 			interface._allShape.clear();

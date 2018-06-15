@@ -36,6 +36,9 @@ class Player
 
 		virtual void play(Rules &rules, Interface &i )= 0;
 		virtual void playForHelp(Rules &rules, Interface &i) {(void)rules;(void)i;return;}
+		virtual void playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface &i)=0;
+		virtual void playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &i)=0;
+		virtual void playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &i)=0;
 		virtual void observe(Rules &rules, int x, int y, std::vector<std::pair<unsigned char, unsigned char>> &captured);
 		virtual void observeMyCapture(std::vector<std::pair<unsigned char, unsigned char>> &captured);
 		inline Stone getColor() {return stoneColor;}
@@ -49,6 +52,8 @@ class Player
 		inline sf::Vector2<int> getCoordCanteen(int index) {return (canteen[index]);}
 		inline void setGomoku(Gomoku *gomoku) {this->gomoku = gomoku; myHeuristic.gomoku = gomoku; ennemyHeuristic.gomoku = gomoku;}
 		inline void	setEnemy(Player *en) {this->enemy = en;}
+		inline void	setMyHeuristic(HeuristicBoard &h) {this->myHeuristic = h;}
+		inline void	setEnnemyHeuristic(HeuristicBoard &h) {this->ennemyHeuristic = h;}
 		inline void	setNbCapture(int nb) {this->nbCapture = nb;}
 		inline void setCoordPlayed(int x, int y) {coordPlayed.x = x; coordPlayed.y = y;}
 		inline void	setSpriteStone(sf::Sprite *stone) {this->stoneSprite = stone;}
