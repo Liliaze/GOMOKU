@@ -30,19 +30,37 @@ void AssistedHumanPlayer::play(Rules &rules, Interface &i) {
 }
 
 void AssistedHumanPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface &interface) {
-	(void)rules;
 	sf::Vector2<int>	tmp(0,0);
+
+	MinMaxDynamicPlayer::playSimpleSwap(gomoku,rules,interface);
+	if (getColor() == WHITE) {
+		interface.setRulesText("IA advises WHITE\nMake your choice", WRULESX , WRULESY);
+	}
+	else {
+		gomoku->resetColorPlayer();
+		gomoku->setCurrentPlayer(gomoku->aWhitePlayer());
+		interface.setRulesText("IA advises BLACK\nMake your choice", WRULESX , WRULESY);
+	}
+	interface.getSpriteList().push_back(interface.getSpriteBlackBox());
+	interface.getSpriteList().push_back(interface.getSpriteWhiteBox());
+	interface.update();
 	while(1) {
 		tmp = interface.checkEventSwap();
 		if (interface.onWhiteBoxP2(tmp.x, tmp.y)) {
+			interface.setRulesText("P2 choose white\nP2 must play", WRULESX , WRULESY);
 			break;
 		}
 		else if (interface.onBlackBoxP2(tmp.x, tmp.y)) {
+			interface.setRulesText("P2 choose BLACK\nP1 is now white\nP1 must play", WRULESX , WRULESY);
 			gomoku->swapPlayer();
 			gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
 			break;
 		}
 	}
+	interface.getSpriteList().pop_back();
+	interface.getSpriteList().pop_back();
+	interface.update();
+	return;
 }
 
 void AssistedHumanPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &interface) {

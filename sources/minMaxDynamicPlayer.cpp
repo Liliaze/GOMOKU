@@ -119,7 +119,7 @@ long long MinMaxDynamicPlayer::startMinMax(int &rx, int &ry, Rules &rules, Inter
 	long long best = MIN_LONG;
 	long long maxBestOption = MIN_LONG;
 	
-	i.getPtrRulesText()->setString("IA thinking...\nPlease waiting.");
+	i.getPtrIAThinkingText()->setString("IA thinking...\nPlease waiting.");
 	i.update();
 
 	if (rules.getTurnCounter() < STARTING_ROUND && minMaxDepth > STARTING_DEPTH)
@@ -140,7 +140,8 @@ long long MinMaxDynamicPlayer::startMinMax(int &rx, int &ry, Rules &rules, Inter
 	for (auto& th : threads) th.join();
 
 	DEBUG << "complexity : " << complexity << "\n";
-	i.getPtrRulesText()->setString("");
+	i.getPtrIAThinkingText()->setString("");
+	i.update();
 	return best;
 }
 
@@ -284,19 +285,27 @@ void  MinMaxDynamicPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interfac
 	int x2 = -1;
 	int y2 = -1;
 
+	i.setRulesText("IA make choice\nbe patient", BRULESX , BRULESY);
 	ifImPlayWhite = startMinMax(x1,y1,rules, i); //test si reste blanc
-	//putStone(x1, y1); //pose temporairement une blanche
+	this->putStone(x1, y1); //pose temporairement une blanche
+	//myHeuristic.put(x1, y1);
+	//ennemyHeuristic.clear(x1,y1);
 	gomoku->swapPlayer(); //devient temporairement noir
 	ifImPlayBlack = startMinMax(x2,y2,rules, i); // test si joue noir au prochain tour
+	gomoku->resetColorPlayer(); //redevenir blanc,
+	//retirer la pierre blanche posé temporairement... ??? comment faire ! MERLIN ??
+	this->unPutStone(x1,y1);
+	//myHeuristic.clear(x1,y1);
+	//ennemyHeuristic.clear(x1,y1);
+	//choix de la couleur et swap si besoin
 	if (ifImPlayWhite > ifImPlayBlack) { //si les prévisions pour blanc étaient meilleure
-		gomoku->resetColorPlayer(); //redevenir blanc,
-		i.setRulesText("IA choosed WHITE and played\n You are still black\nIt's your turn", BRULESX , BRULESY);
+		i.setRulesText("IA choosed WHITE\n and IA played\nYou are black\nIt's your turn\nNo specific rules", BRULESX , BRULESY);
 	}
 	else {
-		i.setRulesText("IA choosed BLACK\nYou are now white\nIt's your turn", WRULESX , WRULESY);
+		gomoku->swapPlayer();
 		gomoku->setCurrentPlayer(gomoku->aBlackPlayer()); //rester noir mais donner la main à l'adversaire qui est devenu blanc
+		i.setRulesText("IA choosed BLACK\nYou are white\nIt's your turn\nNo specific rules", WRULESX , WRULESY);
 	}
-	//retirer la pierre blanche posé temporairement... ??? comment faire ! MERLIN ??
 	return;
 }
 

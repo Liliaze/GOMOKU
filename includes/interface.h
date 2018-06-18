@@ -97,6 +97,7 @@ class Interface {
 		inline	sf::Sprite			&getSpriteBlackBox(void) {return this->_blackBoxSprite;}
 		inline	sf::Sprite			&getSpriteWhiteBox(void) {return this->_whiteBoxSprite;}
 		inline	sf::Text			*getPtrRulesText(void) {return &(this->rulesText);}
+		inline	sf::Text			*getPtrIAThinkingText(void) {return &(this->IAThinkingText);}
 		inline	void				setTimeToPlay(sf::Time newTime) {this->_timeToPlay = newTime;}
 		inline	std::list<sf::Shape*>	&getShapeList() {return this->_allShape;}
 		inline	std::list<sf::Sprite>	&getSpriteList() {return this->_allSprite;}
@@ -253,6 +254,7 @@ class Interface {
 		sf::Text			help5;*/
 		sf::Text			visualAidText;
 		sf::Text			rulesText;
+		sf::Text			IAThinkingText;
 
 		sf::RectangleShape	fiveByFiveRect;
 		sf::RectangleShape	sevenBySevenRect;

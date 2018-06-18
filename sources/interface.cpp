@@ -194,7 +194,8 @@ void    Interface::loadText(void) {
     setText(&nbTurnText, arial,18, Color::Blue, NBTURNX, NBTURNY, "TURN : 0 BLACK ");
     setText(&blackTimeToPlayText, arial, 18, Color::Black, BTIMEX, BTIMEY, "0");
     setText(&whiteTimeToPlayText, arial, 18, Color::White, WTIMEX, WTIMEY, "0");
-    setText(&rulesText, arial, 18, Color::Red, BRULESX, WRULESY, "No specific rules\n good luck");/*
+    setText(&rulesText, arial, 18, Color::Red, BRULESX, WRULESY, "No specific rules\n good luck");
+    setText(&IAThinkingText, arial, 24, Color::Red, 600, 400, "IA thinking...\nPlease wait.");/*
     setText(&help1, arial, 24, Color::Blue, 300, 300, "1");
     setText(&help2, arial, 24, Color(255,0,128), 400, 300, "2");
     setText(&help3, arial, 24, Color::Yellow, 500, 300, "3");
@@ -207,6 +208,7 @@ void    Interface::loadText(void) {
     menu.setMiddle(whiteTimeToPlayText);
     menu.setMiddle(nbTurnText);
     menu.setMiddle(rulesText);
+    menu.setMiddle(IAThinkingText);
     visualAidText.setOrigin(0,0);
 }
 
@@ -471,6 +473,8 @@ void    Interface::gameScreen(void) {
     _allText.push_back(&blackTimeToPlayText);
     _allText.push_back(&whiteTimeToPlayText);
     _allText.push_back(&rulesText);
+    _allText.push_back(&IAThinkingText);
+    IAThinkingText.setString("");
     if (gomoku->getBlackPlayer().getHuman() == true || gomoku->getWhitePlayer().getHuman() == true) {
         _allText.push_back(&visualAidText);
         _allSprite.push_back(_boxSprite);

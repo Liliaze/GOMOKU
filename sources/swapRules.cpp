@@ -24,8 +24,7 @@ bool SwapRules::canPutStone(HeuristicBoard *heuristic, int x, int y) {
 }
 
 void	SwapRules::specificRules(Interface &interface) {
-	if (turnCounter >= 4){
-		interface.getPtrRulesText()->setString("No specific rules");
+	if (turnCounter > 4){
 		return;
 	}
 	else if (turnCounter == 0)
@@ -41,15 +40,10 @@ void	SwapRules::specificRules(Interface &interface) {
 		gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
 	}
 	else if (turnCounter == 3){
-		interface.setRulesText("Do you want play :\nWhite now\nor black after ?", WRULESX , WRULESY);
-		interface.getSpriteList().push_back(interface.getSpriteBlackBox());
-		interface.getSpriteList().push_back(interface.getSpriteWhiteBox());
-		interface.update();
 		gomoku->getCurrentPlayer()->playSimpleSwap(gomoku, *this, interface);
-		interface.setRulesText("", WRULESX , WRULESY);
-		interface.getSpriteList().pop_back();
-		interface.getSpriteList().pop_back();
-		interface.update();
+	}
+	else if (turnCounter == 4){
+		interface.getPtrRulesText()->setString("No specific rules");
 	}
 	return;
 }

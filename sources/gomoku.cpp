@@ -43,34 +43,39 @@ void	Gomoku::initGomoku() {
 
 void	Gomoku::resetColorPlayer()
 {
-	//HeuristicBoard	&tmpH = *(whitePlayer->getMyHeuristic());
+	HeuristicBoard	tmpHW = *(whitePlayer->getMyHeuristic());
+	HeuristicBoard	tmpEHW = *(whitePlayer->getEnnemyHeuristic());
 	int		tmpCapture = whitePlayer->getNbCapture();
 	
-	updatePlayerInBlack(getBlackPlayer());
-	updatePlayerInWhite(getWhitePlayer());
-	//currentPlayer = blackPlayer;
 
 	whitePlayer->setNbCapture(blackPlayer->getNbCapture());
 	blackPlayer->setNbCapture(tmpCapture);
-/*	whitePlayer->setMyHeuristic(*(whitePlayer->getEnnemyHeuristic()));
-	blackPlayer->setMyHeuristic(tmpH);
-	whitePlayer->setEnnemyHeuristic(*(blackPlayer->getMyHeuristic()));
-	blackPlayer->setEnnemyHeuristic(*(whitePlayer->getMyHeuristic()));*/
+	whitePlayer->setMyHeuristic(*(blackPlayer->getMyHeuristic()));
+	whitePlayer->setEnnemyHeuristic(*(blackPlayer->getEnnemyHeuristic()));
+	blackPlayer->setMyHeuristic(tmpHW);
+	blackPlayer->setEnnemyHeuristic(tmpEHW);
+	updatePlayerInBlack(getBlackPlayer());
+	updatePlayerInWhite(getWhitePlayer());
 }
 
 void	Gomoku::swapPlayer() {
-	//HeuristicBoard	&tmpH = *(whitePlayer->getMyHeuristic());
 	int		tmpCapture = whitePlayer->getNbCapture();
-	updatePlayerInBlack(getWhitePlayer());
-	updatePlayerInWhite(getBlackPlayer());
-	blackPlayer->setEnemy(whitePlayer);
-	whitePlayer->setEnemy(blackPlayer);
-	blackPlayer->setNbCapture(tmpCapture);
+	HeuristicBoard	tmpHW = *(whitePlayer->getMyHeuristic());
+	HeuristicBoard	tmpEHW = *(whitePlayer->getEnnemyHeuristic());
+
+	//swap data
 	whitePlayer->setNbCapture(blackPlayer->getNbCapture());
-	/*whitePlayer->setMyHeuristic(*(whitePlayer->getEnnemyHeuristic()));
-	blackPlayer->setMyHeuristic(tmpH);
-	whitePlayer->setEnnemyHeuristic(*(blackPlayer->getMyHeuristic()));
-	blackPlayer->setEnnemyHeuristic(*(whitePlayer->getMyHeuristic()));*/
+	blackPlayer->setNbCapture(tmpCapture);
+	
+	whitePlayer->setMyHeuristic(*(blackPlayer->getMyHeuristic()));
+	whitePlayer->setEnnemyHeuristic(*(blackPlayer->getEnnemyHeuristic()));
+	blackPlayer->setMyHeuristic(tmpHW);
+	blackPlayer->setEnnemyHeuristic(tmpEHW);
+	//swap color
+	updatePlayerInWhite(getBlackPlayer());
+	updatePlayerInBlack(getWhitePlayer());
+	whitePlayer->setEnemy(blackPlayer);
+	blackPlayer->setEnemy(whitePlayer);
 }
 
 void	Gomoku::updateRules()
@@ -141,12 +146,12 @@ void Gomoku::start() {
 			interface._allShape.clear();
 			interface.updateRulesText();
 			interface.updateNbOfTurn();
-			rules->specificRules(interface);
 			if (interface.visualAid && currentPlayer->getHuman()) {
 				interface.updateHelperToPlay();
 			}
 			else
 				interface._allHelpSprite.clear();
+			rules->specificRules(interface);
 			interface.update();
 			//PLAY
 			interface.setTimeToPlay(interface._clockTurn.restart());
@@ -208,6 +213,15 @@ void Gomoku::updateFocus(int x, int y) {
 		for (int j = y-FOCUS; j <= y+FOCUS ; j++) {
 			if (i >= 0 && j >= 0 && i < GW && j < GH)
 				focus[i][j] = true;
+		}
+	}
+}
+
+void Gomoku::cancelFocus(int x, int y) {
+	for (int i = x-FOCUS; i <= x+FOCUS ; i++) {
+		for (int j = y-FOCUS; j <= y+FOCUS ; j++) {
+			if (i >= 0 && j >= 0 && i < GW && j < GH)
+				focus[i][j] = false;
 		}
 	}
 }

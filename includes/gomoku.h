@@ -80,8 +80,10 @@ class Gomoku
 		inline int		getNbEatenStone() {return nbEatenStone;}
 		Stone			getStone(int x, int y);
 		inline void		setStone(Stone stone, int x, int y) {board[x][y] = stone;}
+		inline void		unSetStone(int x, int y) {board[x][y] = FREE;}
 		inline bool		isFocus(int x, int y) {return focus[x][y];}
 		void			updateFocus(int x, int j);
+		void			cancelFocus(int x, int j);
 
 		bool fiveStoneLine(Stone color, int &x, int &y);
 		void checkCapture(Player &current, unsigned char x, unsigned char y, Player &enemy, std::vector<std::pair<unsigned char, unsigned char>> &captured);
