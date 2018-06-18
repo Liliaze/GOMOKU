@@ -30,6 +30,10 @@
 # define BLACKBOXP2_RIGHT	1090
 # define WHITEBOXP2_LEFT	1100
 # define WHITEBOXP2_RIGHT	1195
+# define TWOMORESTONEX	991	
+# define TWOMORESTONEY	760
+# define TWOMORESTONE_RIGHT	1195
+# define TWOMORESTONE_DOWN	805
 # define BLACKCANTEENX 240
 # define BLACKCANTEENY 40
 # define WHITECANTEENX 960
@@ -96,6 +100,7 @@ class Interface {
 		inline	sf::Sprite			*getSpriteBlackStone(void) {return &(this->_blackStone);}
 		inline	sf::Sprite			&getSpriteBlackBox(void) {return this->_blackBoxSprite;}
 		inline	sf::Sprite			&getSpriteWhiteBox(void) {return this->_whiteBoxSprite;}
+		inline	sf::Sprite			&getSpriteTwoMoreStone(void) {return this->_twoMoreStoneSprite;}
 		inline	sf::Text			*getPtrRulesText(void) {return &(this->rulesText);}
 		inline	sf::Text			*getPtrIAThinkingText(void) {return &(this->IAThinkingText);}
 		inline	void				setTimeToPlay(sf::Time newTime) {this->_timeToPlay = newTime;}
@@ -109,6 +114,7 @@ class Interface {
 		bool	onWhiteBoxP1(int x, int y);
 		bool	onBlackBoxP2(int x, int y);
 		bool	onWhiteBoxP2(int x, int y);
+		bool	onTwoMoreStone(int x, int y);
 		bool	onVisualAid(int x, int y);
 		sf::Vector2<int> whiteCanteen[10];
 		sf::Vector2<int> blackCanteen[10];
@@ -195,6 +201,7 @@ class Interface {
 		sf::Sprite			_againNoSprite;
 		sf::Sprite			_blackBoxSprite;
 		sf::Sprite			_whiteBoxSprite;
+		sf::Sprite			_twoMoreStoneSprite;
 		sf::Sprite			_help1Sprite;
 		sf::Sprite			_help2Sprite;
 		sf::Sprite			_help3Sprite;
@@ -220,6 +227,7 @@ class Interface {
 		sf::Texture			_againNoTexture;
 		sf::Texture			_blackBoxTexture;
 		sf::Texture			_whiteBoxTexture;
+		sf::Texture			_twoMoreStoneTexture;
 		sf::Texture			_boxTexture;
 		sf::Texture			_help1Texture;
 		sf::Texture			_help2Texture;
@@ -247,11 +255,6 @@ class Interface {
 		sf::Text			blackTimeToPlayText;
 		sf::Text			timeOfGameText;
 		sf::Text			nbTurnText;
-		/*sf::Text			help1;
-		sf::Text			help2;
-		sf::Text			help3;
-		sf::Text			help4;
-		sf::Text			help5;*/
 		sf::Text			visualAidText;
 		sf::Text			rulesText;
 		sf::Text			IAThinkingText;

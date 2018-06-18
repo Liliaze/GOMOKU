@@ -56,6 +56,7 @@ void    Interface::loadTexture(void) {
     || !_againNoTexture.loadFromFile("./sprite/againNoBox.png")
     || !_blackBoxTexture.loadFromFile("./sprite/blackBox.png")
     || !_whiteBoxTexture.loadFromFile("./sprite/whiteBox.png")
+    || !_twoMoreStoneTexture.loadFromFile("./sprite/twoMoreStone.png")
     || !_boxTexture.loadFromFile("./sprite/boxCube.png")
     || !_help1Texture.loadFromFile("./sprite/help1.png")
     || !_help2Texture.loadFromFile("./sprite/help2.png")
@@ -85,6 +86,7 @@ void    Interface::loadTexture(void) {
        _boxTexture.setSmooth(true);
        _blackBoxTexture.setSmooth(true);
        _whiteBoxTexture.setSmooth(true);
+       _twoMoreStoneTexture.setSmooth(true);
        _help1Texture.setSmooth(true);
        _help2Texture.setSmooth(true);
        _help3Texture.setSmooth(true);
@@ -114,6 +116,7 @@ void    Interface::loadSprite(void) {
     makeSprite(_againNoSprite, _againNoTexture, 1, 1, NO_LEFT, NO_UP);
     makeSprite(_blackBoxSprite, _blackBoxTexture, 0.45, 0.45, BLACKBOXP2_LEFT, SWAPBOX_UP);
     makeSprite(_whiteBoxSprite, _whiteBoxTexture, 0.45, 0.45, WHITEBOXP2_LEFT, SWAPBOX_UP);
+    makeSprite(_twoMoreStoneSprite, _twoMoreStoneTexture, 0.5f, 0.5f, TWOMORESTONEX, TWOMORESTONEY);
     makeSprite(_boxSelectSprite, _boxTexture, 1, 1, 0, 0);
     makeSprite(previewStoneFree, _stoneWhiteTexture,0.825f, 0.825f, 0, 0);
     makeSprite(previewStoneForbidden, _stoneWhiteTexture,0.825f, 0.825f, 0, 0);
@@ -171,7 +174,6 @@ void    Interface::loadSoundAndOpenMusic(void) {
     else {
         bipSound.setVolume(50);
         captureSound.setVolume(50);
-        //testSound.setVolume(50);
         ambiance1.setVolume(5);
         ambiance2.setVolume(5);
         ambiance1.setLoop(true);
@@ -195,13 +197,7 @@ void    Interface::loadText(void) {
     setText(&blackTimeToPlayText, arial, 18, Color::Black, BTIMEX, BTIMEY, "0");
     setText(&whiteTimeToPlayText, arial, 18, Color::White, WTIMEX, WTIMEY, "0");
     setText(&rulesText, arial, 18, Color::Red, BRULESX, WRULESY, "No specific rules\n good luck");
-    setText(&IAThinkingText, arial, 24, Color::Red, 600, 400, "IA thinking...\nPlease wait.");/*
-    setText(&help1, arial, 24, Color::Blue, 300, 300, "1");
-    setText(&help2, arial, 24, Color(255,0,128), 400, 300, "2");
-    setText(&help3, arial, 24, Color::Yellow, 500, 300, "3");
-    setText(&help4, arial, 24, Color::Red, 600, 300, "4");
-    setText(&help5, arial, 24, Color::Green, 700, 300, "5");
-    */
+    setText(&IAThinkingText, arial, 24, Color::Red, 600, 400, "IA thinking...\nPlease wait.");
     setText(&visualAidText, arial, 18, Color::Red, HELPERX, HELPERY + 10, "VisualHelper :\n     [false]");
     menu.setMiddle(timeOfGameText);
     menu.setMiddle(blackTimeToPlayText);
@@ -242,7 +238,6 @@ void    Interface::initCoordCanteen(void) {
     stepx = 0;
     while (i < NB_CAPTURE_TO_WIN) {
         blackCanteen[i] = Vector2<int>((int)(x + stepx), (int)(y));
-            //this->putStone(this->_blackStone, blackCanteen[i].x, blackCanteen[i].y);
             stepx+= step;
         i++;
     }
@@ -253,7 +248,6 @@ void    Interface::initCoordCanteen(void) {
     stepx = 0;
     while (i < NB_CAPTURE_TO_WIN) {
         whiteCanteen[i] = Vector2<int>((int)(x - stepx), (int)(y));
-       // this->putStone(this->_whiteStone, whiteCanteen[i].x, whiteCanteen[i].y);
         stepx+= step;
         i++;
     }
@@ -266,7 +260,6 @@ void    Interface::printCoordBoard(void) {
         j = 0;
         while (j < GH) {
             DEBUG << coordBoard[i][j].x << "," << coordBoard[i][j].y << "|";
-//            this->putStone(*(gomoku->getCurrentPlayer()->getSpriteStone()), coordBoard[i][j].x, coordBoard[i][j].y);
             j++;
         }
         DEBUG << "\n";
@@ -479,11 +472,6 @@ void    Interface::gameScreen(void) {
         _allText.push_back(&visualAidText);
         _allSprite.push_back(_boxSprite);
     }
-    //_allText.push_back(&help1);
-    //_allText.push_back(&help2);
-    //_allText.push_back(&help3);
-    //_allText.push_back(&help4);
-    //_allText.push_back(&help5);
     ambiance2.stop();
     ambiance1.play();
     this->state = GAME;
@@ -635,7 +623,7 @@ void    Interface::checkEvent(Player *current) {
             case Event::MouseMoved :
             {
                 if (current && !current->getHuman())
-                    return;
+                    break;
                 if (state == GAME) {
                     int x = _event.mouseMove.x;
                     int y = _event.mouseMove.y;
@@ -650,9 +638,6 @@ void    Interface::checkEvent(Player *current) {
                     }
                     else if (previewStone)
                         unputPreviewStone(x, y);
-                }
-                else if (state == AGAIN) {
-                    //TO DO : box YES or NO en surbrillance
                 }
             }
             break;
@@ -737,6 +722,15 @@ bool    Interface::onWhiteBoxP2(int x, int y) {
         return false;
 }
 
+bool    Interface::onTwoMoreStone(int x, int y) {
+    if (x <= TWOMORESTONE_RIGHT  && 
+        x >= TWOMORESTONEX  &&
+        y >= TWOMORESTONEY &&
+        y <= TWOMORESTONE_DOWN) {
+        return true;}
+    return false;
+}
+
 bool    Interface::onAgainYes(int x, int y) {
     if (x <= YES_RIGHT + MARGE && 
         x >= YES_LEFT - MARGE &&
@@ -761,7 +755,7 @@ void    Interface::checkClickLeft(Player *current, int x, int y)
 {
     if (state == GAME)
     {
-        if (onBoard(x, y) && current)
+        if (onBoard(x, y) && current->getHuman())
             this->setStoneOnClick(*current, x, y);
         else if (onVisualAid(x,y) && (gomoku->getBlackPlayer().getHuman() == true || gomoku->getWhitePlayer().getHuman() == true))
                 updateVisualAid();
@@ -787,7 +781,7 @@ void    Interface::checkClickLeft(Player *current, int x, int y)
         }
         else if (menu.onGo(x, y)){
             bipSound.play();
-            menu.go(gomoku);//setPlayer... WARNING AJOUTER SET RULES !!
+            menu.go(gomoku);
             setState(GAME);
         }
     }
@@ -800,10 +794,8 @@ void    Interface::checkClickLeft(Player *current, int x, int y)
             removeStone(1,1);
             viewWinner = true;
         }
-        DEBUG << "click during victory or equality screen\n";
     }
     else if (state == AGAIN){
-        DEBUG << "click during Again\n";
         if (onAgainYes(x, y)){
             setState(MENU);
         }
@@ -815,7 +807,6 @@ void    Interface::checkClickLeft(Player *current, int x, int y)
         DEBUG << "click during Pause\n";
     }
     else if (state == GOODBYE){
-        DEBUG << "click during End\n";
     }
     else
         DEBUG << "click during unknow state\n";
@@ -823,11 +814,9 @@ void    Interface::checkClickLeft(Player *current, int x, int y)
 
 void    Interface::updateTimerOfGame(void) {
         setTimeOfGame(this->_clockOfGame.getElapsedTime());
-        String str = /*"          " + */intToString(((int)getTimeOfGameInSeconds())) /*+ "\n\n\nTIME OF GAME"*/;
+        String str = intToString(((int)getTimeOfGameInSeconds()));
         timeOfGameText.setString(str);
         menu.setMiddle(timeOfGameText);
-        //removeStone(timeOfGameText.getPosition().x, timeOfGameText.getPosition().y);
-        //_allText.push_back(&timeOfGameText);
 }
 
 void    Interface::updateTimerToPlay(void) {
@@ -875,7 +864,6 @@ void    Interface::updateVisualAid(void) {
 void    Interface::putHelpSprite(Sprite sprite, int x, int y) {
             sprite.setPosition(coordBoard[x][y].x, coordBoard[x][y].y);
             _allHelpSprite.push_back(sprite);
-            //_window.draw(text);
 }
 
 void    Interface::updateHelperToPlay() {
@@ -922,7 +910,5 @@ void    Interface::update(void) {
             updateTimerOfGame();
         this->_window.clear();
         this->drawGame();
-        //if ((state == GAME /* || state == BLACKWIN || state == WHITEWIN || state == EQUAL*/) && visualAid)
-        //    updateHelperToPlay();
         this->_window.display();
 }

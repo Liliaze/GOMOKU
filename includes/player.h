@@ -38,7 +38,7 @@ class Player
 		virtual void play(Rules &rules, Interface &i )= 0;
 		virtual void playForHelp(Rules &rules, Interface &i) {(void)rules;(void)i;return;}
 		virtual void playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface &i)=0;
-		virtual void playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &i)=0;
+		virtual bool playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &i)=0;
 		virtual void playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &i)=0;
 		virtual void observe(Rules &rules, int x, int y, std::vector<std::pair<unsigned char, unsigned char>> &captured);
 		virtual void observeMyCapture(std::vector<std::pair<unsigned char, unsigned char>> &captured);

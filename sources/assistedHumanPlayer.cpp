@@ -63,7 +63,7 @@ void AssistedHumanPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface
 	return;
 }
 
-void AssistedHumanPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &interface) {
+bool AssistedHumanPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &interface) {
 	(void)rules;
 	sf::Vector2<int>	tmp(0,0);
 	while(1) {
@@ -80,6 +80,7 @@ void AssistedHumanPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interfa
 
 		}*/
 	}
+	return false;
 }
 
 void AssistedHumanPlayer::playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &interface) {
