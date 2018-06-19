@@ -4,6 +4,7 @@
 Rules::Rules() : turnCounter(0)
 {
 	initStartingFocus();
+	twoMoreStone = false;
 }
 
 void Rules::initStartingFocus() {

@@ -40,6 +40,7 @@ void	SwapRules::specificRules(Interface &interface) {
 		gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
 	}
 	else if (turnCounter == 3){
+		interface.setRulesText("Play White now\nor black after", WRULESX , WRULESY);
 		gomoku->getCurrentPlayer()->playSimpleSwap(gomoku, *this, interface);
 	}
 	else if (turnCounter == 4){

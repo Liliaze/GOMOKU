@@ -24,7 +24,6 @@ bool SwapTwoRules::canPutStone(HeuristicBoard *heuristic, int x, int y) {
 }
 
 void	SwapTwoRules::specificRules(Interface &interface) {
-	bool twoStoneMore = false;
 	if (turnCounter > 6){
 		return;
 	}
@@ -41,10 +40,11 @@ void	SwapTwoRules::specificRules(Interface &interface) {
 		gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
 	}
 	else if (turnCounter == 3){
-		twoStoneMore = gomoku->getCurrentPlayer()->playSwapTwoStep1(gomoku, *this, interface);
+		interface.setRulesText("Play White now\nor black after\nor put 2 more", WRULESX , WRULESY);
+		gomoku->getCurrentPlayer()->playSwapTwoStep1(gomoku, *this, interface);
 	}
 	else if (turnCounter == 4){
-		if (twoStoneMore) {
+		if (getTwoMoreStone()) {
 			interface.setRulesText("P2 : two more stone\nput the second stone\nwhere you want", WRULESX, WRULESY);
 			gomoku->swapPlayer();
 			gomoku->setCurrentPlayer(gomoku->aWhitePlayer());
@@ -52,7 +52,7 @@ void	SwapTwoRules::specificRules(Interface &interface) {
 		else
 			interface.getPtrRulesText()->setString("No specific rules");
 	}
-	else if (turnCounter == 5 && twoStoneMore) { //au joueur 1 de choisir sa couleur...
+	else if (turnCounter == 5 && getTwoMoreStone()) { //au joueur 1 de choisir sa couleur...
 		gomoku->getCurrentPlayer()->playSwapTwoStep2(gomoku, *this, interface);
 	}
 	else if (turnCounter == 6){

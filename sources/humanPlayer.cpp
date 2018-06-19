@@ -51,12 +51,9 @@ void HumanPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface &interf
 	interface.update();
 }
 
-bool HumanPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &interface) {
-	(void)rules;
-	bool ret = false;
+void HumanPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &interface) {
 	sf::Vector2<int>	tmp(0,0);
 	
-	interface.setRulesText("You can play :\nWhite now\nor black after\n or put 2 more", WRULESX , WRULESY);
 	interface.getSpriteList().push_back(interface.getSpriteBlackBox());
 	interface.getSpriteList().push_back(interface.getSpriteWhiteBox());
 	interface.getSpriteList().push_back(interface.getSpriteTwoMoreStone());
@@ -75,7 +72,7 @@ bool HumanPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &inte
 		}
 		else if (interface.onTwoMoreStone(tmp.x, tmp.y)) {
 			interface.setRulesText("P2 choose :\n'Put 2 more Stone'\nplease put first", WRULESX , WRULESY);
-			ret = true;
+			rules.setTwoMoreStone(true);
 			break;
 		}
 	}
@@ -83,7 +80,7 @@ bool HumanPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &inte
 	interface.getSpriteList().pop_back();
 	interface.getSpriteList().pop_back();
 	interface.update();
-	return (ret);
+	return;
 }
 
 void HumanPlayer::playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &interface) {

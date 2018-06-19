@@ -116,7 +116,7 @@ void    Interface::loadSprite(void) {
     makeSprite(_againNoSprite, _againNoTexture, 1, 1, NO_LEFT, NO_UP);
     makeSprite(_blackBoxSprite, _blackBoxTexture, 0.45, 0.45, BLACKBOXP2_LEFT, SWAPBOX_UP);
     makeSprite(_whiteBoxSprite, _whiteBoxTexture, 0.45, 0.45, WHITEBOXP2_LEFT, SWAPBOX_UP);
-    makeSprite(_twoMoreStoneSprite, _twoMoreStoneTexture, 0.5f, 0.5f, TWOMORESTONEX, TWOMORESTONEY);
+    makeSprite(_twoMoreStoneSprite, _twoMoreStoneTexture, 0.6f, 0.48f, TWOMORESTONEX, TWOMORESTONEY);
     makeSprite(_boxSelectSprite, _boxTexture, 1, 1, 0, 0);
     makeSprite(previewStoneFree, _stoneWhiteTexture,0.825f, 0.825f, 0, 0);
     makeSprite(previewStoneForbidden, _stoneWhiteTexture,0.825f, 0.825f, 0, 0);
@@ -196,7 +196,7 @@ void    Interface::loadText(void) {
     setText(&nbTurnText, arial,18, Color::Blue, NBTURNX, NBTURNY, "TURN : 0 BLACK ");
     setText(&blackTimeToPlayText, arial, 18, Color::Black, BTIMEX, BTIMEY, "0");
     setText(&whiteTimeToPlayText, arial, 18, Color::White, WTIMEX, WTIMEY, "0");
-    setText(&rulesText, arial, 18, Color::Red, BRULESX, WRULESY, "No specific rules\n good luck");
+    setText(&rulesText, arial, 18, Color::Blue, BRULESX, WRULESY, "No specific rules\n good luck");
     setText(&IAThinkingText, arial, 24, Color::Red, 600, 400, "IA thinking...\nPlease wait.");
     setText(&visualAidText, arial, 18, Color::Red, HELPERX, HELPERY + 10, "VisualHelper :\n     [false]");
     menu.setMiddle(timeOfGameText);

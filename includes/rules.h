@@ -19,6 +19,7 @@ class Rules
 
 		unsigned int turnCounter;
 		bool startingFocus[GW][GH];
+		bool twoMoreStone;
 		Gomoku *gomoku;
 		
 		bool win(Player &player, bool avoidable);
@@ -39,6 +40,8 @@ class Rules
 		bool canPutStone(Player &player, int x, int y);
 		virtual Rules *copy() = 0;
 		virtual void initStartingFocus();
+		inline void	setTwoMoreStone(bool etat) {twoMoreStone = etat;}
+		inline bool	getTwoMoreStone(void) {return twoMoreStone;}
 
 		End checkEnd(Player &nextToPlay);
 };

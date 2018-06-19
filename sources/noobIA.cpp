@@ -42,27 +42,26 @@ void NoobIA::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface &i) {
 	}
 }
 
-bool NoobIA::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &i) {
-	(void)rules;
+void NoobIA::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &i) {
 	sf::Vector2<int>	tmp(0,0);
-	int x = rand() % GW;
+	int x = rand() % 27;
 	if (x%3) {
-		return false;
+		rules.setTwoMoreStone(true);
+		i.getPtrRulesText()->setString("Noob IA choose:\n 'put 2 more stone'");
+		return;
 	}
 	else if (x%2){
 		gomoku->swapPlayer();
 		gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
 		i.getPtrRulesText()->setString("IA choose black");
-		return false;
+		return;
 	}
 	else {
 		i.getPtrRulesText()->setString("IA choose white");
 	}
-	return false;
+	return;
 }
 
 void NoobIA::playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &interface) {
-	(void)rules;
-	(void)gomoku;
-	(void)interface;
+	playSimpleSwap(gomoku, rules, interface);
 }

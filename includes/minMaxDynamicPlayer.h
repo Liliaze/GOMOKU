@@ -52,7 +52,7 @@ class MinMaxDynamicPlayer : public virtual Player
 		long long startMinMax(int &rx, int &ry, Rules &rules, Interface &i);
 		void playToHelp(Rules &rules, Interface &interface);
 		virtual void playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface &i);
-		virtual bool playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &i);
+		virtual void playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &i);
 		virtual void playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &i);
 };
 

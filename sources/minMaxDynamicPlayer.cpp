@@ -285,7 +285,7 @@ void  MinMaxDynamicPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interfac
 	int x2 = -1;
 	int y2 = -1;
 
-	i.setRulesText("IA make choice\nbe patient", BRULESX , BRULESY);
+	i.setRulesText("IA making choice\nbe patient", BRULESX , BRULESY);
 	ifImPlayWhite = startMinMax(x1,y1,rules, i); //test si reste blanc
 	this->putStone(x1, y1); //pose temporairement une blanche
 	//myHeuristic.put(x1, y1);
@@ -309,17 +309,48 @@ void  MinMaxDynamicPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interfac
 	return;
 }
 
-bool  MinMaxDynamicPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &interface) {
-	(void)rules;
-	(void)gomoku;
-	(void)interface;
-	return false;
+void  MinMaxDynamicPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &i) {
+	long long ifImPlayBlack = MIN_LONG;
+	long long ifImPlayWhite = MIN_LONG;
+	long long ifImPutTwoMoreStone1 = MIN_LONG;
+	long long ifImPutTwoMoreStone2 = MIN_LONG;
+	int x1, y1, x2, y2, x3, y3, x4, y4 = -1;
+
+	i.setRulesText("IA making choice\nbe patient", BRULESX , BRULESY);
+	ifImPlayWhite = startMinMax(x1,y1,rules, i); //test si reste blanc
+	this->putStone(x1, y1); //pose temporairement une blanche
+	gomoku->swapPlayer(); //devient temporairement noir
+	ifImPlayBlack = startMinMax(x2,y2,rules, i); // test si joue noir au prochain tour
+	this->putStone(x2, y2); //pose temporairement une noire
+	gomoku->resetColorPlayer(); //redevenir blanc,
+	ifImPutTwoMoreStone1 = startMinMax(x3, y3, rules, i);
+	this->putStone(x3, y3); //pose temporairement une blanche
+	gomoku->swapPlayer();
+	ifImPutTwoMoreStone2 = startMinMax(x4, y4, rules, i);
+	this->unPutStone(x2,y2); //en tant que noir retirer la pierre noire temporaire
+	gomoku->resetColorPlayer(); //redevenir blanc,
+	this->unPutStone(x1,y1);
+	this->unPutStone(x3,y3); // retirer les 2 pierres blanches temporaires
+	DEBUG << "WHITE :" << ifImPlayWhite << ", BLACK: " << ifImPlayWhite << ", TWO : " << ifImPutTwoMoreStone1 << " = " << ifImPutTwoMoreStone2;
+	ifImPutTwoMoreStone1 = (ifImPutTwoMoreStone1 + ifImPutTwoMoreStone2) / 2;
+	DEBUG << "WHITE :" << ifImPlayWhite << ", BLACK: " << ifImPlayWhite << ", TWO : " << ifImPutTwoMoreStone1;
+	if (ifImPlayWhite > ifImPlayBlack && ifImPlayWhite > ifImPutTwoMoreStone1) { //si les prévisions pour blanc étaient meilleure
+		i.setRulesText("IA choosed WHITE\n and IA played\nYou are black\nIt's your turn\nNo specific rules", BRULESX , BRULESY);
+	}
+	else if (ifImPlayBlack > ifImPlayWhite && ifImPlayBlack > ifImPutTwoMoreStone1) {
+		gomoku->swapPlayer();
+		gomoku->setCurrentPlayer(gomoku->aBlackPlayer()); //devenir noir etdonner la main à l'adversaire qui est devenu blanc
+		i.setRulesText("IA choosed BLACK\nYou are white\nIt's your turn\nNo specific rules", WRULESX , WRULESY);
+	}
+	else {
+		rules.setTwoMoreStone(true);
+		i.setRulesText("IA choosed :\n'put 2 more stone'\nchoice is yours now", WRULESX , WRULESY);
+	}
+	return;
 }
 
-void  MinMaxDynamicPlayer::playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &interface) {
-	(void)rules;
-	(void)gomoku;
-	(void)interface;
+void  MinMaxDynamicPlayer::playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &i) {
+	playSimpleSwap(gomoku,rules,i);
 }
 
 
