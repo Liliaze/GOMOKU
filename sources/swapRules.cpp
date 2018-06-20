@@ -36,7 +36,7 @@ void	SwapRules::specificRules(Interface &interface) {
 	}
 	else if (turnCounter == 2){
 		interface.setRulesText("Again, again you\nPut third stone\nwhere you want.", BRULESX, BRULESY);
-		gomoku->resetColorPlayer();
+		gomoku->swapPlayer(true);
 		gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
 	}
 	else if (turnCounter == 3){

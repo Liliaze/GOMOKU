@@ -37,7 +37,7 @@ void AssistedHumanPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface
 		interface.setRulesText("IA advises WHITE\nMake your choice", WRULESX , WRULESY);
 	}
 	else {
-		gomoku->resetColorPlayer();
+		gomoku->swapPlayer(true);
 		gomoku->setCurrentPlayer(gomoku->aWhitePlayer());
 		interface.setRulesText("IA advises BLACK\nMake your choice", WRULESX , WRULESY);
 	}
@@ -51,7 +51,7 @@ void AssistedHumanPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interfa
 		interface.setRulesText("IA advises WHITE\nMake your choice", WRULESX , WRULESY);
 	}
 	else if (getColor() == BLACK){
-		gomoku->resetColorPlayer();
+		gomoku->swapPlayer(true);
 		gomoku->setCurrentPlayer(gomoku->aWhitePlayer());
 		interface.setRulesText("IA advises BLACK\nMake your choice", WRULESX , WRULESY);
 	}

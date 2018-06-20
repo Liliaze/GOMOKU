@@ -21,7 +21,7 @@ void Player::putStone(int x, int y) {
 }
 void Player::unPutStone(int x, int y) {
 	gomoku->unSetStone(x,y);
-	gomoku->cancelFocus(x,y);
+	//gomoku->cancelFocus(x,y);
 }
 
 void Player::observe(Rules &rules, int x, int y, std::vector<std::pair<unsigned char, unsigned char>> &captured) {

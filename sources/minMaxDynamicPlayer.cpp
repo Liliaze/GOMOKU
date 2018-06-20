@@ -277,6 +277,30 @@ void MinMaxDynamicPlayer::playToHelp(Rules &rules, Interface &i) {
 	i.putStoneToHelp(x, y);
 }
 
+long long MinMaxDynamicPlayer::simulate(int &x, int &y, Rules &rules, Interface &i) {
+	int r = startMinMax(x,y,rules, i);
+	this->putStone(x, y);
+	myHeuristic.put(x, y);
+	ennemyHeuristic.clear(x, y);
+	DEBUG << "/////////////SIMULATE//////////////\n";
+	myHeuristic.print(x, y, true);
+	ennemyHeuristic.print(x, y, true);
+	gomoku->printBoard(x, y);
+	DEBUG << "///////////////////////////////////\n";
+	return r;
+}
+
+void MinMaxDynamicPlayer::undoSimulation(int &x, int &y) {
+	this->unPutStone(x,y);
+	myHeuristic.beCaptured(x, y);
+	ennemyHeuristic.remove(x, y);
+	DEBUG << "/////////UNDO SIMULATION///////////\n";
+	myHeuristic.print(x, y, true);
+	ennemyHeuristic.print(x, y, true);
+	gomoku->printBoard(x, y);
+	DEBUG << "///////////////////////////////////\n";
+}
+
 void  MinMaxDynamicPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface &i) {
 	long long ifImPlayBlack = MIN_LONG;
 	long long ifImPlayWhite = MIN_LONG;
@@ -286,18 +310,15 @@ void  MinMaxDynamicPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interfac
 	int y2 = -1;
 
 	i.setRulesText("IA making choice\nbe patient", BRULESX , BRULESY);
-	ifImPlayWhite = startMinMax(x1,y1,rules, i); //test si reste blanc
-	this->putStone(x1, y1); //pose temporairement une blanche
-	//myHeuristic.put(x1, y1);
-	//ennemyHeuristic.clear(x1,y1);
+	ifImPlayWhite = simulate(x1,y1,rules, i); //test si reste blanc
+
 	gomoku->swapPlayer(); //devient temporairement noir
 	ifImPlayBlack = startMinMax(x2,y2,rules, i); // test si joue noir au prochain tour
-	gomoku->resetColorPlayer(); //redevenir blanc,
+	//gomoku->resetColorPlayer(); //redevenir blanc,
+	gomoku->swapPlayer(true); //redevenir blanc,
 	//retirer la pierre blanche posé temporairement... ??? comment faire ! MERLIN ??
-	this->unPutStone(x1,y1);
-	//myHeuristic.clear(x1,y1);
-	//ennemyHeuristic.clear(x1,y1);
-	//choix de la couleur et swap si besoin
+	this->undoSimulation(x1,y1);
+
 	if (ifImPlayWhite > ifImPlayBlack) { //si les prévisions pour blanc étaient meilleure
 		i.setRulesText("IA choosed WHITE\n and IA played\nYou are black\nIt's your turn\nNo specific rules", BRULESX , BRULESY);
 	}
@@ -317,20 +338,23 @@ void  MinMaxDynamicPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interf
 	int x1, y1, x2, y2, x3, y3, x4, y4 = -1;
 
 	i.setRulesText("IA making choice\nbe patient", BRULESX , BRULESY);
-	ifImPlayWhite = startMinMax(x1,y1,rules, i); //test si reste blanc
-	this->putStone(x1, y1); //pose temporairement une blanche
+	DEBUG << "FIRST SIMULATE\n";
+	ifImPlayWhite = simulate(x1,y1,rules, i); //test si reste blanc
+
 	gomoku->swapPlayer(); //devient temporairement noir
-	ifImPlayBlack = startMinMax(x2,y2,rules, i); // test si joue noir au prochain tour
-	this->putStone(x2, y2); //pose temporairement une noire
-	gomoku->resetColorPlayer(); //redevenir blanc,
-	ifImPutTwoMoreStone1 = startMinMax(x3, y3, rules, i);
-	this->putStone(x3, y3); //pose temporairement une blanche
+	DEBUG << "SECOND SIMULATE\n";
+	ifImPlayBlack = simulate(x2,y2,rules, i); // test si joue noir au prochain tour
+	//gomoku->resetColorPlayer(); //redevenir blanc,
+	gomoku->swapPlayer(true); //redevenir blanc,
+	DEBUG << "THIRD SIMULATE\n";
+	ifImPutTwoMoreStone1 = simulate(x3, y3, rules, i);
 	gomoku->swapPlayer();
 	ifImPutTwoMoreStone2 = startMinMax(x4, y4, rules, i);
-	this->unPutStone(x2,y2); //en tant que noir retirer la pierre noire temporaire
-	gomoku->resetColorPlayer(); //redevenir blanc,
-	this->unPutStone(x1,y1);
-	this->unPutStone(x3,y3); // retirer les 2 pierres blanches temporaires
+	this->undoSimulation(x2,y2); //en tant que noir retirer la pierre noire temporaire
+	//gomoku->resetColorPlayer(); //redevenir blanc,
+	gomoku->swapPlayer(true); //redevenir blanc,
+	this->undoSimulation(x1,y1);
+	this->undoSimulation(x3,y3); // retirer les 2 pierres blanches temporaires
 	DEBUG << "WHITE :" << ifImPlayWhite << ", BLACK: " << ifImPlayWhite << ", TWO : " << ifImPutTwoMoreStone1 << " = " << ifImPutTwoMoreStone2;
 	ifImPutTwoMoreStone1 = (ifImPutTwoMoreStone1 + ifImPutTwoMoreStone2) / 2;
 	DEBUG << "WHITE :" << ifImPlayWhite << ", BLACK: " << ifImPlayWhite << ", TWO : " << ifImPutTwoMoreStone1;

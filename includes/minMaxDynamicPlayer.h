@@ -42,6 +42,8 @@ class MinMaxDynamicPlayer : public virtual Player
 		bool canAvoidDefeat_e(HeuristicBoard &myH, HeuristicBoard &ennemyH);
 		long long heuristic_e(HeuristicBoard &heuristic, HeuristicBoard &ennemyHeuristic, bool last, int depth);
 		void startThread(int &rx, int &ry, long long &option, long long &best, long long &maxBestOption, std::multimap<long long, std::unique_ptr<Choice>> &choices, int threadIndex);
+		long long simulate(int &x, int &y, Rules &rules, Interface &i);
+		void undoSimulation(int &x, int &y);
 
 
 	public:

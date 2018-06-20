@@ -201,10 +201,11 @@ Player*    Menu::updatePlayer(TextChoice &textC) {
         return new HumanPlayer();
     else if (textC == RANDOM)
         return new NoobIA();
-    else if (textC == IA_HARD)
-        return new MinMaxDynamicPlayer({11, 9, 7, 5, 5, 5, 3, 3, 3, 3, 0});
-        //return new MinMaxDynamicPlayer({11, 11, 7, 7, 7, 3, 3, 1, 1, 1, 0});
-    else if (textC == IA_NORMAL)
+    else if (textC == IA_HARD) {
+        //return new MinMaxDynamicPlayer({11, 9, 7, 5, 5, 5, 3, 3, 3, 3, 0});
+		DEBUG << "IA HARD\n";
+        return new MinMaxDynamicPlayer({11, 11, 7, 7, 7, 3, 3, 1, 1, 1, 0});
+    } else if (textC == IA_NORMAL)
         return new MinMaxDynamicPlayer({7, 7, 5, 5, 3, 3, 0});
     else if (textC == IA_EASY)
         return new MinMaxDynamicPlayer({7, 3, 0});

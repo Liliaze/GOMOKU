@@ -222,6 +222,14 @@ void HeuristicBoard::capture(unsigned char x, unsigned char y)
 	totalCaptured += 1;
 }
 
+void HeuristicBoard::remove(unsigned char x, unsigned char y)
+{
+	removeEnnemyThreat(x, y, 1, 0, HORIZONTAL_SHIFT, HORIZONTAL_MASK);
+	removeEnnemyThreat(x, y, 0, 1, VERTICAL_SHIFT, VERTICAL_MASK);
+	removeEnnemyThreat(x, y, 1, 1, DRIGHT_SHIFT, DRIGHT_MASK);
+	removeEnnemyThreat(x, y, -1, 1, DLEFT_SHIFT, DLEFT_MASK);
+}
+
 HeuristicBoard& HeuristicBoard::put(unsigned char x, unsigned char y)
 {
 	updateThreat(x, y, 1, 0, HORIZONTAL_SHIFT, HORIZONTAL_MASK);
@@ -259,13 +267,13 @@ int HeuristicBoard::getBestLevel(unsigned char x, unsigned char y) {
 	return r;
 }
 
-void HeuristicBoard::print(int lastX, int lastY) {
+void HeuristicBoard::print(int lastX, int lastY, bool all) {
 	DEBUG << "\n";
 	int level;
 	for (int j = 0; j < GH; j++) {
 		for (int i = 0; i < GW; i++) {
 			level = getBestLevel(i, j);
-			if (gomoku->getStone(i, j) != FREE) {
+			if (!all && gomoku->getStone(i, j) != FREE) {
 				gomoku->printStone(i, j, lastX, lastY);
 			} else if (level == 1) {
 				DEBUG << BLUE << level << DEFAULT_COLOR;
