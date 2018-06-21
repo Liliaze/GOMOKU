@@ -157,9 +157,6 @@ void Gomoku::start() {
 			//UPDATE HEURISTIC
 			currentPlayer->myHeuristic.put(x, y);
 			currentPlayer->ennemyHeuristic.clear(x, y);
-			currentPlayer->myHeuristic.print(x, y);
-			currentPlayer->ennemyHeuristic.print(x, y);
-			printBoard(x, y);
 			//DRAW
 			drawStone();
 			//CAPTURE

@@ -42,7 +42,6 @@ Rules *ProRules::copy() {
 	ProRules *cpy = new ProRules();
 	cpy->setGomoku(gomoku);
 	cpy->setTurnCounter(turnCounter);
-    DEBUG << "ProRules";
 	return cpy;
 }
 

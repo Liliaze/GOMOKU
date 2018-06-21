@@ -35,7 +35,7 @@ void	SwapTwoRules::specificRules(Interface &interface) {
 		gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
 	}
 	else if (turnCounter == 2){
-		interface.setRulesText("Again, again you\nPut third stone\nwhere you want.", BRULESX, BRULESY);
+		interface.setRulesText("Then again you\nPut third stone\nwhere you want.", BRULESX, BRULESY);
 		gomoku->swapPlayer(true);
 		gomoku->setCurrentPlayer(gomoku->aBlackPlayer());
 	}

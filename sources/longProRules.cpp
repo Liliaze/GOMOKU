@@ -42,7 +42,6 @@ Rules *LongProRules::copy() {
 	LongProRules *cpy = new LongProRules();
 	cpy->setGomoku(gomoku);
 	cpy->setTurnCounter(turnCounter);
-    DEBUG << "LongProRules";
 	return cpy;
 }
 

@@ -69,7 +69,7 @@ void    Interface::loadTexture(void) {
     || !_blackTimerTexture.loadFromFile("./sprite/blackTimer.png")
     || !_whiteTimerTexture.loadFromFile("./sprite/whiteTimer.png")
     ) {
-       DEBUG << "Error during import " << std::endl;
+       ERROR << "Error during import Texture " << std::endl;
        exit(1);
    }
    else {
@@ -144,7 +144,6 @@ void    Interface::loadSprite(void) {
     previewStoneFree.setColor(Color(0,255,0,125));
     previewStoneForbidden.setColor(Color(255,0,0,125));
     _boxSelectSprite.setColor(Color(125,175,125,200));
-   DEBUG << "SPRITES LOADS\n";
 }
 
 void    Interface::makeSprite(Sprite &sprite, Texture &texture, float sizeX, float sizeY, int posX, int posY) {
@@ -157,7 +156,7 @@ void    Interface::loadSoundBuffer(void) {
      if (!bipSB.loadFromFile("./sound/bip.wav")
         || !captureSB.loadFromFile("./sound/capture.wav")
         || !victorySB.loadFromFile("./sound/victory.wav")) {
-         DEBUG << "ERROR DURING LOAD SOUND BUFFER\n";
+         ERROR << "ERROR DURING LOAD SOUND BUFFER\n";
          exit(1);
      }
 }
@@ -168,7 +167,7 @@ void    Interface::loadSoundAndOpenMusic(void) {
     victorySound.setBuffer(victorySB);
     if (!ambiance1.openFromFile("./sound/ambiance1.wav")
         || !ambiance2.openFromFile("./sound/ambiance2.wav")) {
-            DEBUG << "ERROR DURING OPEN MUSIC\n";
+            ERROR << "ERROR DURING OPEN MUSIC\n";
             exit(1);
         }
     else {
@@ -197,7 +196,7 @@ void    Interface::loadText(void) {
     setText(&blackTimeToPlayText, arial, 18, Color::Black, BTIMEX, BTIMEY, "0");
     setText(&whiteTimeToPlayText, arial, 18, Color::White, WTIMEX, WTIMEY, "0");
     setText(&rulesText, arial, 18, Color::Blue, BRULESX, WRULESY, "No specific rules\n good luck");
-    setText(&IAThinkingText, arial, 24, Color::Red, 600, 400, "IA thinking...\nPlease wait.");
+    setText(&IAThinkingText, arial, 24, Color::Red, 600, 380, "*****************************************************\n*********** IA IS THINKING.. PLEASE WAIT **********\n*****************************************************");
     setText(&visualAidText, arial, 18, Color::Red, HELPERX, HELPERY + 10, "VisualHelper :\n     [false]");
     menu.setMiddle(timeOfGameText);
     menu.setMiddle(blackTimeToPlayText);
@@ -332,16 +331,6 @@ void    Interface::removeText(Vector2<int> coord) {
 
 void    Interface::setState(State newState)
 {
-    if (state == PAUSE && newState != PAUSE) {
-        this->state = newState;
-        stopPauseScreen();
-        return;
-    }
-    else if (state == PAUSE) {
-        this->state = newState;
-        startPauseScreen();
-        return;
-    }
     this->state = newState;
     switch (state) {
             case MENU :
@@ -376,14 +365,6 @@ void    Interface::setState(State newState)
     this->update();
 }
 
-void    Interface::startPauseScreen(void) {
-    DEBUG <<" PAUSE START";
-}
-
-void    Interface::stopPauseScreen(void) {
-    DEBUG <<" PAUSE STOP";
-}
-
 void    Interface::drawGame(void) {
     //Affichage des sprites en premier:
     for (std::list<Sprite>::iterator it = _allSprite.begin(); it != _allSprite.end(); it++) {
@@ -413,13 +394,11 @@ void    Interface::cleanInterface(void) {
 void    Interface::welcomeScreen(void) {
     _allSprite.push_back(_helloSprite);
     this->state = WELCOME;
-    DEBUG << "WELCOME SCREEN\n";
     update();
     sleep(1);
 }
 
 void    Interface::goodByeScreen(void) {
-    DEBUG << "GOODBYE SCREEN\n";
     this->state = GOODBYE;
     cleanInterface();
     _allSprite.push_back(_goodByeSprite);
@@ -428,7 +407,6 @@ void    Interface::goodByeScreen(void) {
 }
 
 void    Interface::menuScreen(void) {
-    DEBUG << "MENU SCREEN\n";
     cleanInterface();
     _allSprite.push_back(menu.backgroundMenuSprite);
     _allText.push_back(&menu.textBoxP1);
@@ -438,7 +416,6 @@ void    Interface::menuScreen(void) {
 }
 
 void    Interface::againScreen(void) {
-    DEBUG << "AGAIN SCREEN\n";
     cleanInterface();
     _allSprite.push_back(_againSprite);
     _allSprite.push_back(_againYesSprite);
@@ -478,32 +455,21 @@ void    Interface::gameScreen(void) {
 }
 
 void    Interface::whiteWinScreen(void) {
-    DEBUG << "WHITE WIN SCREEN\n";
     victorySound.play();
     _allSprite.push_back(_whiteWinSprite);
     this->state = WHITEWIN;
 }
 
 void    Interface::blackWinScreen(void) {
-    DEBUG << "BLACK WIN SCREEN\n";
     victorySound.play();
     _allSprite.push_back(_blackWinSprite);
     this->state = BLACKWIN;
 }
 
 void    Interface::equalScreen(void) {
-    DEBUG << "EQUAL WIN SCREEN\n";
     victorySound.play();
     _allSprite.push_back(_equalitySprite);
     this->state = EQUAL;
-}
-
-void    Interface::timer(void) {
-
-}
-
-void    Interface::captureZone(void) {
-
 }
 
 void    Interface::putStone(Sprite stone, int x, int y) {
@@ -579,7 +545,6 @@ Vector2<int>    Interface::checkEventSwap() {
                 {
                     case Mouse::Left :
                     {
-                        DEBUG << "click : xy(" << _event.mouseButton.x << "," << _event.mouseButton.y << ")\n"; 
                         return (Vector2<int>(_event.mouseButton.x, _event.mouseButton.y));
                     }
                     break;
@@ -647,7 +612,6 @@ void    Interface::checkEvent(Player *current) {
                 {
                     case Mouse::Left :
                         this->checkClickLeft(current, _event.mouseButton.x, _event.mouseButton.y);
-                        DEBUG << "click : xy(" <<_event.mouseButton.x << "," << _event.mouseButton.y << ")\n"; 
                     break;
                 default :
                     break;
@@ -804,12 +768,11 @@ void    Interface::checkClickLeft(Player *current, int x, int y)
         }
     }
     else if (state == PAUSE){
-        DEBUG << "click during Pause\n";
     }
     else if (state == GOODBYE){
     }
     else
-        DEBUG << "click during unknow state\n";
+        ERROR << "click during unknow state\n";
 }
 
 void    Interface::updateTimerOfGame(void) {

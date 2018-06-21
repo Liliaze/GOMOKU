@@ -153,8 +153,6 @@ class Interface {
 		void	againScreen(void);
 		void	gameScreen(void);
 		void	goodByeScreen(void);
-		void	startPauseScreen(void);
-		void	stopPauseScreen(void);
 		void	captureZone(void);
 		void	timer(void);
 		void	loadTexture(void);

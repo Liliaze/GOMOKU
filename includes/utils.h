@@ -25,11 +25,11 @@
 
 #include "colors.h"
 #define NPOS std::string::npos
-#define PRINT_ERROR true
+#define PRINT_ERROR false
 #define ERROR if (PRINT_ERROR) std::cerr
-#define PRINT_DEBUG true
+#define PRINT_DEBUG false
 #define DEBUG if (PRINT_DEBUG) std::cerr
-#define PRINT_OUT true
+#define PRINT_OUT false
 #define OUT if (PRINT_OUT) std::cout
 #define ABS(x) (x) < 0 ? -(x) : (x)
 #define MIN_INT -10000000

@@ -33,7 +33,6 @@ bool Rules::canAvoidDefeat(Player *player, Player *ennemy) {
 						choice.myHeuristic.capture(it->first, it->second);
 					}
 					if (!choice.ennemyHeuristic.fiveLine || choice.myHeuristic.totalCaptured >= NB_CAPTURE_TO_WIN) {
-						DEBUG << BLUE << "avoid with " << (int)i << "/" << (int)j << DEFAULT_COLOR << "\n";
 						return true;
 					}
 			}
@@ -62,11 +61,9 @@ bool Rules::equality(Player &nextToPlay) {
 
 End Rules::playerWon(Player &player) {
 	if (player.getColor() == WHITE) {
-		DEBUG << LIGHT_GREY << HLL_RED << "White player win" << DEFAULT_COLOR << "\n";
 		return WHITE_WIN;
 	}
 	else {
-		DEBUG << DARK_BLACK << HLIGHT_RED << "Black player win" << DEFAULT_COLOR << "\n";
 		return BLACK_WIN;
 	}
 }
@@ -84,7 +81,6 @@ End Rules::checkEnd(Player &nextToPlay) {
 		return playerWon(*lastPlayer);
 
 	else if (equality(nextToPlay)) {
-		DEBUG << DARK_BLUE << HLIGHT_BLUE << "no winner" << DEFAULT_COLOR << "\n";
 		return EQUALITY;
 	}
 	return NO_END;

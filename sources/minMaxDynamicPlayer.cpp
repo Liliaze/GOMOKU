@@ -39,13 +39,11 @@ MinMaxDynamicPlayer::MinMaxDynamicPlayer(std::array<unsigned char, 11> dw) : Pla
 		minMaxDepth += 1;
 	}
 	depthWidths[i] = 0;
-	DEBUG << "NEW MINMAXPLAYER\n";
 
 }
 
 MinMaxDynamicPlayer::~MinMaxDynamicPlayer()
 {
-	DEBUG << "BYE MINMAXPLAYER\n";
 }
 
 void MinMaxDynamicPlayer::heuristicMap(std::multimap<long long, std::unique_ptr<Choice>> &result, Gomoku *gomoku, Rules &rules, bool last, int depth, HeuristicBoard &myOrigin, HeuristicBoard &ennemyOrigin) {
@@ -119,7 +117,7 @@ long long MinMaxDynamicPlayer::startMinMax(int &rx, int &ry, Rules &rules, Inter
 	long long best = MIN_LONG;
 	long long maxBestOption = MIN_LONG;
 	
-	i.getPtrIAThinkingText()->setString("IA thinking...\nPlease waiting.");
+	i.getPtrIAThinkingText()->setString("*****************************************************\n********** IA IS THINKING.. PLEASE WAIT **********\n*****************************************************");
 	i.update();
 
 	if (rules.getTurnCounter() < STARTING_ROUND && minMaxDepth > STARTING_DEPTH)
@@ -299,14 +297,12 @@ void  MinMaxDynamicPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interfac
 	int x2 = -1;
 	int y2 = -1;
 
-	i.setRulesText("IA making choice\nbe patient", BRULESX , BRULESY);
+	i.setRulesText("IA is making choice\nbe patient", BRULESX , BRULESY);
 	ifImPlayWhite = simulate(x1,y1,rules, i); //test si reste blanc
 
 	gomoku->swapPlayer(); //devient temporairement noir
 	ifImPlayBlack = startMinMax(x2,y2,rules, i); // test si joue noir au prochain tour
-	//gomoku->resetColorPlayer(); //redevenir blanc,
 	gomoku->swapPlayer(true); //redevenir blanc,
-	//retirer la pierre blanche posé temporairement... ??? comment faire ! MERLIN ??
 	this->undoSimulation(x1,y1);
 
 	if (ifImPlayWhite > ifImPlayBlack) { //si les prévisions pour blanc étaient meilleure
@@ -328,26 +324,20 @@ void  MinMaxDynamicPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interf
 	int x1, y1, x2, y2, x3, y3, x4, y4 = -1;
 
 	i.setRulesText("IA making choice\nbe patient", BRULESX , BRULESY);
-	DEBUG << "FIRST SIMULATE\n";
 	ifImPlayWhite = simulate(x1,y1,rules, i); //test si reste blanc
 
 	gomoku->swapPlayer(); //devient temporairement noir
-	DEBUG << "SECOND SIMULATE\n";
 	ifImPlayBlack = simulate(x2,y2,rules, i); // test si joue noir au prochain tour
-	//gomoku->resetColorPlayer(); //redevenir blanc,
 	gomoku->swapPlayer(true); //redevenir blanc,
-	DEBUG << "THIRD SIMULATE\n";
 	ifImPutTwoMoreStone1 = simulate(x3, y3, rules, i);
 	gomoku->swapPlayer();
 	ifImPutTwoMoreStone2 = startMinMax(x4, y4, rules, i);
 	this->undoSimulation(x2,y2); //en tant que noir retirer la pierre noire temporaire
-	//gomoku->resetColorPlayer(); //redevenir blanc,
 	gomoku->swapPlayer(true); //redevenir blanc,
 	this->undoSimulation(x1,y1);
 	this->undoSimulation(x3,y3); // retirer les 2 pierres blanches temporaires
-	DEBUG << "WHITE :" << ifImPlayWhite << ", BLACK: " << ifImPlayWhite << ", TWO : " << ifImPutTwoMoreStone1 << " = " << ifImPutTwoMoreStone2;
-	ifImPutTwoMoreStone1 = (ifImPutTwoMoreStone1 + ifImPutTwoMoreStone2) / 2;
-	DEBUG << "WHITE :" << ifImPlayWhite << ", BLACK: " << ifImPlayWhite << ", TWO : " << ifImPutTwoMoreStone1;
+	if (ifImPutTwoMoreStone1 < ifImPutTwoMoreStone2)
+		ifImPutTwoMoreStone1 = ifImPutTwoMoreStone2;
 	if (ifImPlayWhite > ifImPlayBlack && ifImPlayWhite > ifImPutTwoMoreStone1) { //si les prévisions pour blanc étaient meilleure
 		i.setRulesText("IA choosed WHITE\n and IA played\nYou are black\nIt's your turn\nNo specific rules", BRULESX , BRULESY);
 	}

@@ -18,7 +18,8 @@ Menu::Menu() {
     choiceP2 = HUMAN;
     variante = CLASSIQUE;
     if (!arial.loadFromFile("./sprite/arial_black.ttf")){
-        DEBUG << "Error load Font Arial\n";
+        ERROR << "Error load Font Arial\n";
+        exit(1);
     }
     else {
         DEBUG << "SET\n";
@@ -39,13 +40,13 @@ Menu::Menu() {
         textBoxVariante.setPosition(XBOX_MIDDLE, YBOX_VARIANTE_MIDDLE);
     }
     if (!backgroundMenuTexture.loadFromFile("./sprite/menu.png")) {
-        DEBUG << "Error load Texture Menu\n";
+        ERROR << "Error load Texture Menu\n";
+        exit(1);
     }
     else {
         backgroundMenuTexture.setSmooth(true);
         backgroundMenuSprite.setTexture(backgroundMenuTexture);
     }
-    DEBUG << "MENU READY\n";
 }
 
 Menu::~Menu() {
@@ -99,7 +100,6 @@ void    Menu::setTextString(Text &text, TextChoice &textChoice) {
             text.setString("SWAP2");
             break;
         default:
-            DEBUG << "not Text???? wtf\n";
             exit(0);
             break;
     }
@@ -138,7 +138,7 @@ void    Menu::switchTextBox(Text &text, TextChoice &textC) {
     else if (textC == SWAP2)
         textC = CLASSIQUE;
     else
-        DEBUG << "ERROR SWITCH TEXT IN MENU\n";
+        ERROR << "IN MENU TEXT UNKNOW";
     updateText(text, textC);
 }
 
@@ -191,7 +191,7 @@ Rules*      Menu::updateRules(TextChoice &textC) {
     else if (textC == SWAP2)
         return new SwapTwoRules();
     else {
-        DEBUG << "IN MENU, UPDATERULES, TEXT UNKNOW";
+        ERROR << "IN MENU, UPDATERULES, TEXT UNKNOW";
         exit(1);
     }
 }
@@ -202,8 +202,6 @@ Player*    Menu::updatePlayer(TextChoice &textC) {
     else if (textC == RANDOM)
         return new NoobIA();
     else if (textC == IA_HARD) {
-        //return new MinMaxDynamicPlayer({11, 9, 7, 5, 5, 5, 3, 3, 3, 3, 0});
-		DEBUG << "IA HARD\n";
         return new MinMaxDynamicPlayer({11, 11, 7, 7, 7, 3, 3, 1, 1, 1, 0});
     } else if (textC == IA_NORMAL)
         return new MinMaxDynamicPlayer({7, 7, 5, 5, 3, 3, 0});
@@ -216,7 +214,7 @@ Player*    Menu::updatePlayer(TextChoice &textC) {
     else if (textC == AH_EASY)
         return new AssistedHumanPlayer({7, 3, 0});
     else {
-        DEBUG << "ERROR SWITCH PLAYER IN GO MENU\n";
+        ERROR << "ERROR SWITCH PLAYER IN GO MENU\n";
         exit(1);
     }
 	return NULL;
