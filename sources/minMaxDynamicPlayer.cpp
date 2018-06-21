@@ -317,40 +317,7 @@ void  MinMaxDynamicPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interfac
 }
 
 void  MinMaxDynamicPlayer::playSwapTwoStep1(Gomoku *gomoku, Rules &rules, Interface &i) {
-	long long ifImPlayBlack = MIN_LONG;
-	long long ifImPlayWhite = MIN_LONG;
-	long long ifImPutTwoMoreStone1 = MIN_LONG;
-	long long ifImPutTwoMoreStone2 = MIN_LONG;
-	int x1, y1, x2, y2, x3, y3, x4, y4 = -1;
-
-	i.setRulesText("IA making choice\nbe patient", BRULESX , BRULESY);
-	ifImPlayWhite = simulate(x1,y1,rules, i); //test si reste blanc
-
-	gomoku->swapPlayer(); //devient temporairement noir
-	ifImPlayBlack = simulate(x2,y2,rules, i); // test si joue noir au prochain tour
-	gomoku->swapPlayer(true); //redevenir blanc,
-	ifImPutTwoMoreStone1 = simulate(x3, y3, rules, i);
-	gomoku->swapPlayer();
-	ifImPutTwoMoreStone2 = startMinMax(x4, y4, rules, i);
-	this->undoSimulation(x2,y2); //en tant que noir retirer la pierre noire temporaire
-	gomoku->swapPlayer(true); //redevenir blanc,
-	this->undoSimulation(x1,y1);
-	this->undoSimulation(x3,y3); // retirer les 2 pierres blanches temporaires
-	if (ifImPutTwoMoreStone1 < ifImPutTwoMoreStone2)
-		ifImPutTwoMoreStone1 = ifImPutTwoMoreStone2;
-	if (ifImPlayWhite > ifImPlayBlack && ifImPlayWhite > ifImPutTwoMoreStone1) { //si les prévisions pour blanc étaient meilleure
-		i.setRulesText("IA choosed WHITE\n and IA played\nYou are black\nIt's your turn\nNo specific rules", BRULESX , BRULESY);
-	}
-	else if (ifImPlayBlack > ifImPlayWhite && ifImPlayBlack > ifImPutTwoMoreStone1) {
-		gomoku->swapPlayer();
-		gomoku->setCurrentPlayer(gomoku->aBlackPlayer()); //devenir noir etdonner la main à l'adversaire qui est devenu blanc
-		i.setRulesText("IA choosed BLACK\nYou are white\nIt's your turn\nNo specific rules", WRULESX , WRULESY);
-	}
-	else {
-		rules.setTwoMoreStone(true);
-		i.setRulesText("IA choosed :\n'put 2 more stone'\nchoice is yours now", WRULESX , WRULESY);
-	}
-	return;
+	playSimpleSwap(gomoku,rules,i);
 }
 
 void  MinMaxDynamicPlayer::playSwapTwoStep2(Gomoku *gomoku, Rules &rules, Interface &i) {
