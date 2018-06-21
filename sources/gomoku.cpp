@@ -42,10 +42,8 @@ void	Gomoku::initGomoku() {
 }
 
 void	Gomoku::swapPlayer(bool reset) {
-	DEBUG << "/////////BEFORE SWAP///////////\n";
 	whitePlayer->getMyHeuristic()->print(-1, -1);
 	whitePlayer->getEnnemyHeuristic()->print(-1, -1);
-	DEBUG << "///////////////////////////////\n";
 
 	int		tmpCapture = whitePlayer->getNbCapture();
 	HeuristicBoard	whiteTmp = *(whitePlayer->getMyHeuristic());
@@ -70,10 +68,8 @@ void	Gomoku::swapPlayer(bool reset) {
 		updatePlayerInWhite(getWhitePlayer());
 	}
 
-	DEBUG << "/////////AFTER SWAP///////////\n";
 	whitePlayer->getMyHeuristic()->print(-1, -1);
 	whitePlayer->getEnnemyHeuristic()->print(-1, -1);
-	DEBUG << "//////////////////////////////\n";
 }
 
 void	Gomoku::updateRules()
@@ -330,7 +326,6 @@ void Gomoku::captureAll(Player &current, sf::Sprite *spriteEnemy, std::vector<st
 void Gomoku::capture(Player &current, Sprite *spriteEnemy, int x1, int y1) {
 	current.nbCapture += 1;
 	setStone(FREE, x1, y1);
-			DEBUG << "CAPTURE = " << current.nbCapture << " " << x1 << " " << y1 << "\n";
 	interface.capture(current, spriteEnemy, x1, y1); // ajoute 1 stone de la couleur enemy du current dans sa zone de capture, pour cela check le nb de capture et put des stones au bon endroit.
 }
 

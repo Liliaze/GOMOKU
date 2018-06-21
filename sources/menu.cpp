@@ -28,9 +28,9 @@ Menu::Menu() {
         textBoxP1.setCharacterSize(24);
         textBoxP2.setCharacterSize(24);
         textBoxVariante.setCharacterSize(24);
-        textBoxP1.setColor(Color::Red);
-        textBoxP2.setColor(Color::Black);
-        textBoxVariante.setColor(Color::Blue);
+        textBoxP1.setFillColor(Color::Red);
+        textBoxP2.setFillColor(Color::Black);
+        textBoxVariante.setFillColor(Color::Blue);
         updateText(textBoxP1, choiceP1);
         updateText(textBoxP2, choiceP2);
         updateText(textBoxVariante, variante);

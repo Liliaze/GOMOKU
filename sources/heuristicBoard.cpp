@@ -4,7 +4,6 @@ const long long HeuristicBoard::levels[6] = {L0, L1, L2, L3, L4, HAS_WON};
 
 HeuristicBoard::HeuristicBoard()
 {
-//	DEBUG << "new 1\n";
 	bzero(heuristic, sizeof(short int[GW][GH]));
 	totalCaptured = 0;
 	fiveLine = 0;
@@ -15,16 +14,12 @@ HeuristicBoard::HeuristicBoard()
 }
 
 HeuristicBoard::HeuristicBoard(HeuristicBoard *copyFrom) {
-//	DEBUG << "memcopy\n";
-//	DEBUG << "copy : " << heuristic << "/" << copyFrom->heuristic << "\n";
 	totalCaptured = copyFrom->totalCaptured;
 	fiveLine = copyFrom->fiveLine;
 	stone = copyFrom->stone;
 	gomoku = copyFrom->gomoku;
 	score = copyFrom->score;
 	memcpy((void*)heuristic, (void*)(copyFrom->heuristic), sizeof(short int[GW][GH]));
-//	failure("quit");
-//	DEBUG << "end copy\n";
 }
 
 HeuristicBoard::~HeuristicBoard()
@@ -39,10 +34,7 @@ void HeuristicBoard::getAdjacent(char x, char y, char vx, char vy, char &before,
 	afterWall = 0;
 	char xi = vx;
 	char yi = vy;
-//	DEBUG << "stone : " << stone << "\n";
-//	DEBUG << "SEARCH ADJACENT : ";
 	while (1) {
-//		DEBUG << "+";
 		if (gomoku->getStone(x+xi,y+yi) == stone)
 			after += 1;
 		else {
@@ -54,7 +46,6 @@ void HeuristicBoard::getAdjacent(char x, char y, char vx, char vy, char &before,
 		xi += vx;
 		yi += vy;
 	}
-//	DEBUG << "\n";
 	xi = vx;
 	yi = vy;
 	while (1) {
@@ -85,7 +76,6 @@ void HeuristicBoard::clearOne(char x, char y, char vx, char vy, char shift, shor
 
 HeuristicBoard& HeuristicBoard::clear(unsigned char x, unsigned char y)
 {
-//	DEBUG << "clear\n";
 	if (GET_HH(heuristic[x][y]) < 5)
 		REMOVE_THREAT(GET_HH(heuristic[x][y]));
 	else
@@ -268,7 +258,6 @@ int HeuristicBoard::getBestLevel(unsigned char x, unsigned char y) {
 }
 
 void HeuristicBoard::print(int lastX, int lastY, bool all) {
-	DEBUG << "\n";
 	int level;
 	for (int j = 0; j < GH; j++) {
 		for (int i = 0; i < GW; i++) {

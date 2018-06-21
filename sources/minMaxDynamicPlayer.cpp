@@ -282,11 +282,6 @@ long long MinMaxDynamicPlayer::simulate(int &x, int &y, Rules &rules, Interface 
 	this->putStone(x, y);
 	myHeuristic.put(x, y);
 	ennemyHeuristic.clear(x, y);
-	DEBUG << "/////////////SIMULATE//////////////\n";
-	myHeuristic.print(x, y, true);
-	ennemyHeuristic.print(x, y, true);
-	gomoku->printBoard(x, y);
-	DEBUG << "///////////////////////////////////\n";
 	return r;
 }
 
@@ -294,11 +289,6 @@ void MinMaxDynamicPlayer::undoSimulation(int &x, int &y) {
 	this->unPutStone(x,y);
 	myHeuristic.beCaptured(x, y);
 	ennemyHeuristic.remove(x, y);
-	DEBUG << "/////////UNDO SIMULATION///////////\n";
-	myHeuristic.print(x, y, true);
-	ennemyHeuristic.print(x, y, true);
-	gomoku->printBoard(x, y);
-	DEBUG << "///////////////////////////////////\n";
 }
 
 void  MinMaxDynamicPlayer::playSimpleSwap(Gomoku *gomoku, Rules &rules, Interface &i) {

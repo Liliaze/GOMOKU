@@ -184,7 +184,7 @@ void    Interface::loadSoundAndOpenMusic(void) {
 void    Interface::setText(Text *text, Font &font, int size, Color color, int posX, int posY, String str) {
     text->setFont(font);
     text->setCharacterSize(size);
-    text->setColor(color);
+    text->setFillColor(color);
     text->setPosition(posX, posY);
     text->setString(str);
     menu.setMiddle(*text);
@@ -846,12 +846,12 @@ void    Interface::updateVisualAid(void) {
         String str = "Visual Helper :\n     [";
         if (visualAid) {
             visualAid = false;
-            visualAidText.setColor(Color::Red);
+            visualAidText.setFillColor(Color::Red);
             _allHelpSprite.clear();
             str += "false]";
         }
         else {
-            visualAidText.setColor(Color(50,200,50));
+            visualAidText.setFillColor(Color(50,200,50));
             visualAid = true;
             str += "TRUE]";
             updateHelperToPlay();
